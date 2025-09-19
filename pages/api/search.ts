@@ -8,7 +8,23 @@ type Item = {
   image: string | null;
   shop: string | null;
   source: "rakuten";
-  url: string; // もしもで包んだ最終URL
+  url: string;
+};
+
+type RakutenImage = { imageUrl: string };
+type RakutenItem = {
+  itemCode: string;
+  itemName: string;
+  itemPrice?: number;
+  itemUrl: string;
+  affiliateUrl?: string;
+  shopName?: string;
+  mediumImageUrls?: RakutenImage[];
+  smallImageUrls?: RakutenImage[];
+};
+type RakutenResponse = {
+  Items?: { Item: RakutenItem }[];
+  count?: number;
 };
 
 const RAKUTEN_BASE =
@@ -24,7 +40,10 @@ function wrapMoshimo(targetUrl: string) {
   )}`;
 }
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   try {
     const q = String(req.query.q || "").trim();
     if (!q) return res.status(400).json({ error: "q is required" });
@@ -37,20 +56,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     )}&hits=20&imageFlag=1`;
 
     const r = await fetch(url, { headers: { "User-Agent": "japanese-sake-ai" } });
-    const data = await r.json();
+    const data = (await r.json()) as RakutenResponse;
 
-    const rawItems = Array.isArray(data?.Items) ? data.Items : [];
-    const items: Item[] = rawItems.map((w: any) => {
-      const it = w.Item;
-      const rawUrl: string = it.itemUrl; // affiliateUrlは使わず、もしもで統一
+    const rawItems = Array.isArray(data.Items) ? data.Items : [];
+    const items: Item[] = rawItems.map(({ Item: it }) => {
+      const rawUrl = it.itemUrl; // affiliateUrl は使わず もしも で統一
+      const img =
+        it.mediumImageUrls?.[0]?.imageUrl ??
+        it.smallImageUrls?.[0]?.imageUrl ??
+        null;
       return {
         id: String(it.itemCode),
         title: it.itemName ?? "",
-        price: it.itemPrice ?? null,
-        image:
-          it.mediumImageUrls?.[0]?.imageUrl ??
-          it.smallImageUrls?.[0]?.imageUrl ??
-          null,
+        price: typeof it.itemPrice === "number" ? it.itemPrice : null,
+        image: img,
         shop: it.shopName ?? null,
         source: "rakuten",
         url: wrapMoshimo(rawUrl),
@@ -63,7 +82,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const result = filtered.length > 0 ? filtered : [fallbackDassai39()];
 
     console.log({ q, total, afterFilter: filtered.length, noFilter });
-    return res.status(200).json({ items: result, total, afterFilter: filtered.length, noFilter });
+    return res
+      .status(200)
+      .json({ items: result, total, afterFilter: filtered.length, noFilter });
   } catch (e) {
     console.error(e);
     return res.status(500).json({ error: "search_failed" });
@@ -85,6 +106,8 @@ function fallbackDassai39(): Item {
     image: null,
     shop: null,
     source: "rakuten",
-    url: wrapMoshimo("https://search.rakuten.co.jp/search/mall/%E7%8D%BA%E7%A5%AD+39/"),
+    url: wrapMoshimo(
+      "https://search.rakuten.co.jp/search/mall/%E7%8D%BA%E7%A5%AD+39/"
+    ),
   };
 }
