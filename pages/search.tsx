@@ -1,12 +1,29 @@
-// pages/search.tsx
 import { useState } from "react";
 
+type Item = {
+  id: string;
+  title: string;
+  price: number | null;
+  image: string | null;
+  shop: string | null;
+  source: "rakuten";
+  url: string;
+};
+type ApiResponse = {
+  items: Item[];
+  total: number;
+  afterFilter: number;
+  noFilter: boolean;
+};
+
 export default function SearchPage() {
-  const [q, setQ] = useState("");
-  const [data, setData] = useState<any>(null);
+  const [q, setQ] = useState<string>("");
+  const [data, setData] = useState<ApiResponse | null>(null);
+
   const run = async (keyword: string) => {
     const r = await fetch(`/api/search?q=${encodeURIComponent(keyword)}`);
-    setData(await r.json());
+    const json: ApiResponse = await r.json();
+    setData(json);
   };
 
   return (
@@ -29,7 +46,7 @@ export default function SearchPage() {
             件数: {data.total}（フィルタ後 {data.afterFilter} / noFilter {String(data.noFilter)}）
           </div>
           <ul className="grid gap-3">
-            {data.items?.map((it: any) => (
+            {data.items.map((it: Item) => (
               <li key={it.id} className="border p-3 rounded">
                 <div className="font-medium">{it.title}</div>
                 {it.image && <img src={it.image} alt={it.title} className="w-32 my-2" />}
@@ -51,3 +68,4 @@ export default function SearchPage() {
     </main>
   );
 }
+
