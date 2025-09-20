@@ -18,7 +18,19 @@ type ApiResponse = {
   mode?: "normal" | "gift";
 };
 type ApiError = { error: string; message?: string; status?: number; body?: string; detail?: unknown };
-type ApiResponseOrError = ApiResponse & Partial<ApiError> | ApiError;
+// union 表現（表示時に型ガードします）
+type ApiResponseOrError = ApiResponse | ApiError;
+
+function isObject(v: unknown): v is Record<string, unknown> {
+  return typeof v === "object" && v !== null;
+}
+function isApiResponse(v: unknown): v is ApiResponse {
+  if (!isObject(v)) return false;
+  return Array.isArray(v.items);
+}
+function isApiError(v: unknown): v is ApiError {
+  return isObject(v) && "error" in v;
+}
 
 export default function SearchPage() {
   const [q, setQ] = useState<string>("");
@@ -31,28 +43,32 @@ export default function SearchPage() {
     setLoading(true);
     try {
       const r = await fetch(`/api/search?q=${encodeURIComponent(keyword)}&mode=${mode}`);
-      const json: ApiResponseOrError = await r.json();
-      setData(json);
-    } catch (e: any) {
-      setData({ error: "client_fetch_failed", message: String(e?.message ?? e) });
+      const json: unknown = await r.json();
+      // どちらかに正しく絞って state へ
+      if (isApiResponse(json) || isApiError(json)) {
+        setData(json);
+      } else {
+        setData({ error: "unexpected_payload" });
+      }
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : String(e);
+      setData({ error: "client_fetch_failed", message: msg });
     } finally {
       setLoading(false);
     }
   };
 
+  // 300ms デバウンス（入力/モード変更で検索）
   useEffect(() => {
     if (!q.trim()) { setData(null); return; }
-    const id = setTimeout(() => run(q), 300);
+    const id = setTimeout(() => void run(q), 300);
     return () => clearTimeout(id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [q, mode]);
 
   const onKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") run(q);
+    if (e.key === "Enter") void run(q);
   };
-
-  const asApi = (d: ApiResponseOrError | null): d is ApiResponse =>
-    !!d && "items" in d && Array.isArray((d as any).items);
 
   return (
     <main className="p-4 max-w-3xl mx-auto">
@@ -66,10 +82,10 @@ export default function SearchPage() {
           className="border px-2 py-1 flex-1"
           placeholder="例：獺祭 39 / 純米大吟醸"
         />
-        <button onClick={() => run(q)} className="border px-3">検索</button>
-        <button onClick={() => { setQ("獺祭 39"); run("獺祭 39"); }} className="border px-3">テスト</button>
+        <button onClick={() => void run(q)} className="border px-3">検索</button>
+        <button onClick={() => { setQ("獺祭 39"); void run("獺祭 39"); }} className="border px-3">テスト</button>
         <button
-          onClick={() => setMode(m => m === "normal" ? "gift" : "normal")}
+          onClick={() => setMode(m => (m === "normal" ? "gift" : "normal"))}
           className="border px-3"
           title="ギフト向け（飲み比べ・セット許可）に切替"
         >
@@ -79,13 +95,13 @@ export default function SearchPage() {
 
       {loading && <div className="text-sm text-gray-600 mb-2">検索中…</div>}
 
-      {data && "error" in data && (
+      {isApiError(data) && (
         <pre className="bg-red-50 border text-red-700 p-3 rounded text-xs overflow-auto mb-3">
           {JSON.stringify(data, null, 2)}
         </pre>
       )}
 
-      {asApi(data) && (
+      {isApiResponse(data) && (
         <>
           <div className="text-sm mb-2">
             件数: {data.total}（フィルタ後 {data.afterFilter} / noFilter {String(data.noFilter)} / mode {mode}）
@@ -102,7 +118,12 @@ export default function SearchPage() {
                   <div className="font-medium mb-1">{it.title}</div>
                   <div className="text-sm text-gray-700 mb-1">{it.shop ?? "-"}</div>
                   <div className="text-sm mb-2">{it.price != null ? `¥${it.price.toLocaleString()}` : "-"}</div>
-                  <a className="inline-block text-blue-600 underline" href={`/api/out?url=${encodeURIComponent(it.url)}`} target="_blank" rel="noopener noreferrer">
+                  <a
+                    className="inline-block text-blue-600 underline"
+                    href={`/api/out?url=${encodeURIComponent(it.url)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     購入へ
                   </a>
                 </div>
@@ -112,7 +133,7 @@ export default function SearchPage() {
         </>
       )}
 
-      {!loading && (!data || (asApi(data) && data.items.length === 0)) && (
+      {!loading && (!data || (isApiResponse(data) && data.items.length === 0)) && (
         <div className="text-sm text-gray-600 mt-6">
           キーワードを入力すると自動で検索します。0件のときは条件を少し緩めてみてください。
         </div>
@@ -120,5 +141,6 @@ export default function SearchPage() {
     </main>
   );
 }
+
 
 
