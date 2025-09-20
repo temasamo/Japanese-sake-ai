@@ -31,8 +31,8 @@ export default function SearchPage() {
       const r = await fetch(`/api/search?q=${encodeURIComponent(keyword)}`);
       const json: ApiResponseOrError = await r.json();
       setData(json);
-    } catch (e: any) {
-      setData({ error: "client_fetch_failed", message: String(e?.message ?? e) });
+    } catch (e: unknown) {
+      setData({ error: "client_fetch_failed", message: e instanceof Error ? e.message : String(e) });
     } finally {
       setLoading(false);
     }
@@ -43,7 +43,6 @@ export default function SearchPage() {
     if (!q.trim()) { setData(null); return; }
     const id = setTimeout(() => run(q), 300);
     return () => clearTimeout(id);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [q]);
 
   // Enterで実行
@@ -52,7 +51,7 @@ export default function SearchPage() {
   };
 
   const asApi = (d: ApiResponseOrError | null): d is ApiResponse =>
-    !!d && "items" in d && Array.isArray((d as any).items);
+    !!d && "items" in d && Array.isArray((d as ApiResponse).items);
 
   return (
     <main className="p-4 max-w-3xl mx-auto">
