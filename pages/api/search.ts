@@ -24,6 +24,8 @@ type RakutenItem = {
 type RakutenResponse = {
   Items?: { Item: RakutenItem }[];
   count?: number;
+  error?: string;
+  error_description?: string;
 };
 
 const RAKUTEN_BASE =
@@ -48,9 +50,7 @@ export default async function handler(
     const q = String(req.query.q || "").trim();
     if (!q) return res.status(400).json({ error: "q is required" });
 
-    // ギフトモード切替
     const mode = String(req.query.mode || "normal"); // "gift" ならギフトモード
-    const allowSets = mode === "gift";
 
     const appId = process.env.RAKUTEN_APP_ID;
     if (!appId) return res.status(500).json({ error: "RAKUTEN_APP_ID missing" });
@@ -68,9 +68,7 @@ export default async function handler(
     }
 
     const data = (await r.json()) as RakutenResponse;
-    if (data.error) {
-      return res.status(502).json({ error: "rakuten_api_error", detail: data });
-    }
+    if ("error" in data && data.error) return res.status(502).json({ error: "rakuten_api_error", detail: data });
 
     const rawItems = Array.isArray(data.Items) ? data.Items : [];
     const items: Item[] = rawItems.map(({ Item: it }) => {
@@ -91,6 +89,7 @@ export default async function handler(
     });
 
     const noFilter = process.env.NO_FILTER === "1";
+    const allowSets = mode === "gift";
     const filtered = noFilter ? items : items.filter((it) => passAllRules(it, { allowSets }));
 
     // ★ フォールバックを複数に
@@ -98,13 +97,7 @@ export default async function handler(
 
     return res
       .status(200)
-      .json({ 
-        items: result, 
-        total: items.length, 
-        afterFilter: filtered.length, 
-        noFilter,
-        mode // デバッグ用
-      });
+      .json({ items: result, total: items.length, afterFilter: filtered.length, noFilter, mode });
   } catch (e: unknown) {
     console.error("[SEARCH_CATCH]", e);
     return res.status(500).json({ error: "search_failed", message: e instanceof Error ? e.message : String(e) });
@@ -113,10 +106,10 @@ export default async function handler(
 // ========= ここまでハンドラ =========
 
 function passAllRules(it: Item, opts: { allowSets: boolean }): boolean {
-  // 価格帯（現状維持）
+  // 価格帯
   if (it.price != null && (it.price < 1000 || it.price > 20000)) return false;
 
-  // 箱・ケース・グッズ・他ジャンル除外（現状維持）
+  // 箱・ケース・グッズ・他ジャンル除外
   const ng = [
     "箱のみ","化粧箱のみ","カートン","ケース","段ボール","専用箱",
     "お猪口","徳利","ぐい呑","グラス","酒器","袋のみ","ギフト袋",
@@ -128,9 +121,7 @@ function passAllRules(it: Item, opts: { allowSets: boolean }): boolean {
   const setNg = ["セット","飲み比べ","詰め合わせ","3本","5本","6本"];
   if (!opts.allowSets && setNg.some(w => it.title.includes(w))) return false;
 
-  // 画像なし・タイトルなし
   if (!it.title || !it.image) return false;
-
   return true;
 }
 
