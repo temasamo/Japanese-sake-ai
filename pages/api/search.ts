@@ -1,4 +1,3 @@
-// pages/api/search.ts
 import type { NextApiRequest, NextApiResponse } from "next";
 
 type Item = {
@@ -25,8 +24,6 @@ type RakutenItem = {
 type RakutenResponse = {
   Items?: { Item: RakutenItem }[];
   count?: number;
-  error?: string;
-  error_description?: string;
 };
 
 const RAKUTEN_BASE =
@@ -50,6 +47,10 @@ export default async function handler(
   try {
     const q = String(req.query.q || "").trim();
     if (!q) return res.status(400).json({ error: "q is required" });
+
+    // ギフトモード切替
+    const mode = String(req.query.mode || "normal"); // "gift" ならギフトモード
+    const allowSets = mode === "gift";
 
     const appId = process.env.RAKUTEN_APP_ID;
     if (!appId) return res.status(500).json({ error: "RAKUTEN_APP_ID missing" });
@@ -90,14 +91,20 @@ export default async function handler(
     });
 
     const noFilter = process.env.NO_FILTER === "1";
-    const filtered = noFilter ? items : items.filter(passAllRules);
+    const filtered = noFilter ? items : items.filter((it) => passAllRules(it, { allowSets }));
 
     // ★ フォールバックを複数に
     const result = filtered.length > 0 ? filtered : fallbackItems();
 
     return res
       .status(200)
-      .json({ items: result, total: items.length, afterFilter: filtered.length, noFilter });
+      .json({ 
+        items: result, 
+        total: items.length, 
+        afterFilter: filtered.length, 
+        noFilter,
+        mode // デバッグ用
+      });
   } catch (e: unknown) {
     console.error("[SEARCH_CATCH]", e);
     return res.status(500).json({ error: "search_failed", message: e instanceof Error ? e.message : String(e) });
@@ -105,22 +112,23 @@ export default async function handler(
 }
 // ========= ここまでハンドラ =========
 
-function passAllRules(it: Item): boolean {
-  // 価格帯
+function passAllRules(it: Item, opts: { allowSets: boolean }): boolean {
+  // 価格帯（現状維持）
   if (it.price != null && (it.price < 1000 || it.price > 20000)) return false;
 
-  // 箱・ケース・グッズ・他ジャンル除外
+  // 箱・ケース・グッズ・他ジャンル除外（現状維持）
   const ng = [
     "箱のみ","化粧箱のみ","カートン","ケース","段ボール","専用箱",
     "お猪口","徳利","ぐい呑","グラス","酒器","袋のみ","ギフト袋",
     "梅酒","みりん","焼酎","ビール","ワイン"
   ];
-  if (ng.some((w) => it.title.includes(w))) return false;
+  if (ng.some(w => it.title.includes(w))) return false;
 
-  // セット系（ギフトモードで解除予定）
+  // セット系：通常は除外、ギフトは許可
   const setNg = ["セット","飲み比べ","詰め合わせ","3本","5本","6本"];
-  if (process.env.MODE !== "gift" && setNg.some((w) => it.title.includes(w))) return false;
+  if (!opts.allowSets && setNg.some(w => it.title.includes(w))) return false;
 
+  // 画像なし・タイトルなし
   if (!it.title || !it.image) return false;
 
   return true;
@@ -135,9 +143,7 @@ function fallbackItems(): Item[] {
       image: null,
       shop: null,
       source: "rakuten",
-      url: wrapMoshimo(
-        "https://search.rakuten.co.jp/search/mall/%E7%8D%BA%E7%A5%AD+39/"
-      ),
+      url: wrapMoshimo("https://search.rakuten.co.jp/search/mall/%E7%8D%BA%E7%A5%AD+39/")
     },
     {
       id: "fallback-kubota-senju",
@@ -146,9 +152,7 @@ function fallbackItems(): Item[] {
       image: null,
       shop: null,
       source: "rakuten",
-      url: wrapMoshimo(
-        "https://search.rakuten.co.jp/search/mall/%E4%B9%85%E4%BF%9D%E7%94%B0+%E5%8D%83%E5%AF%BF/"
-      ),
+      url: wrapMoshimo("https://search.rakuten.co.jp/search/mall/%E4%B9%85%E4%BF%9D%E7%94%B0+%E5%8D%83%E5%AF%BF/")
     },
     {
       id: "fallback-hakkaisan",
@@ -157,9 +161,7 @@ function fallbackItems(): Item[] {
       image: null,
       shop: null,
       source: "rakuten",
-      url: wrapMoshimo(
-        "https://search.rakuten.co.jp/search/mall/%E5%85%AB%E6%B5%B7%E5%B1%B1+%E7%89%B9%E5%88%A5%E6%9C%AC%E9%86%B8%E9%80%A0/"
-      ),
+      url: wrapMoshimo("https://search.rakuten.co.jp/search/mall/%E5%85%AB%E6%B5%B7%E5%B1%B1+%E7%89%B9%E5%88%A5%E6%9C%AC%E9%86%B8%E9%80%A0/")
     },
   ];
 }
