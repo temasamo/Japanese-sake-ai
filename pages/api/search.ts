@@ -72,7 +72,7 @@ export default async function handler(
     if ("error" in data && data.error) return res.status(502).json({ error: "rakuten_api_error", detail: data });
 
     const rawItems = Array.isArray(data.Items) ? data.Items : [];
-    const items: Item[] = rawItems.map(({ Item: it }, idx) => {
+    const items: Item[] = rawItems.map(({ Item: it }) => {
       const img =
         it.mediumImageUrls?.[0]?.imageUrl ??
         it.smallImageUrls?.[0]?.imageUrl ??

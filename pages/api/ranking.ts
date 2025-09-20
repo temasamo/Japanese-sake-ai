@@ -15,6 +15,25 @@ type Item = {
 type Cache = { at: number; items: Item[] };
 let cache: Cache | null = null;
 
+type RakutenImage = { imageUrl: string };
+type RakutenItem = {
+  itemCode: string;
+  itemName: string;
+  itemPrice?: number;
+  itemUrl: string;
+  shopName?: string;
+  mediumImageUrls?: RakutenImage[];
+  smallImageUrls?: RakutenImage[];
+  reviewCount?: number;
+  reviewAverage?: number;
+};
+type RakutenResponse = {
+  Items?: { Item: RakutenItem }[];
+  count?: number;
+  error?: string;
+  error_description?: string;
+};
+
 function wrapMoshimo(u: string) {
   const a = process.env.MOSHIMO_A_ID!;
   const p = process.env.MOSHIMO_P_ID!;
@@ -38,8 +57,8 @@ export default async function handler(_req: NextApiRequest, res: NextApiResponse
     try {
       const r = await fetch(url, { headers: { "User-Agent": "japanese-sake-ai" } });
       if (!r.ok) continue;
-      const data: any = await r.json();
-      const items = (data?.Items ?? []).map((x: any) => x.Item).map((it: any) => ({
+      const data = (await r.json()) as RakutenResponse;
+      const items = (data?.Items ?? []).map((x) => x.Item).map((it) => ({
         id: String(it.itemCode),
         title: it.itemName ?? "",
         price: typeof it.itemPrice === "number" ? it.itemPrice : null,
@@ -68,7 +87,7 @@ export default async function handler(_req: NextApiRequest, res: NextApiResponse
   const top5 = [...uniq.values()]
     .sort((a, b) => b._pop - a._pop)
     .slice(0, 5)
-    .map(({ _pop, ...rest }) => rest);
+    .map(({ _pop: _, ...rest }) => rest);
 
   cache = { at: Date.now(), items: top5 };
   res.status(200).json({ items: top5, cached: false });
