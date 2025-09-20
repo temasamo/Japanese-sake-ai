@@ -8,6 +8,7 @@ type Item = {
   shop: string | null;
   source: "rakuten";
   url: string;
+  _idx?: number; // 元順序保持用
 };
 
 type RakutenImage = { imageUrl: string };
@@ -71,7 +72,7 @@ export default async function handler(
     if ("error" in data && data.error) return res.status(502).json({ error: "rakuten_api_error", detail: data });
 
     const rawItems = Array.isArray(data.Items) ? data.Items : [];
-    const items: Item[] = rawItems.map(({ Item: it }) => {
+    const items: Item[] = rawItems.map(({ Item: it }, idx) => {
       const img =
         it.mediumImageUrls?.[0]?.imageUrl ??
         it.smallImageUrls?.[0]?.imageUrl ??
@@ -83,6 +84,7 @@ export default async function handler(
         image: img,
         shop: it.shopName ?? null,
         source: "rakuten",
+        _idx: 0, // フォールバック用
         // affiliateUrl は使わず、もしもで統一
         url: wrapMoshimo(it.itemUrl),
       };
@@ -92,8 +94,17 @@ export default async function handler(
     const allowSets = mode === "gift";
     const filtered = noFilter ? items : items.filter((it) => passAllRules(it, { allowSets }));
 
-    // ★ フォールバックを複数に
-    const result = filtered.length > 0 ? filtered : fallbackItems();
+    // モード別スコアリングで並び替え
+    const sorted =
+      filtered.length > 0
+        ? [...filtered].sort((a, b) => {
+            const s = scoreByMode(b, mode as "normal" | "gift") - scoreByMode(a, mode as "normal" | "gift");
+            if (s !== 0) return s;
+            return (a._idx ?? 0) - (b._idx ?? 0); // 元順に
+          })
+        : fallbackItems();
+
+    const result = sorted;
 
     return res
       .status(200)
@@ -125,6 +136,51 @@ function passAllRules(it: Item, opts: { allowSets: boolean }): boolean {
   return true;
 }
 
+// ===== モード別スコアリング =====
+function scoreByMode(it: Item, mode: "normal" | "gift"): number {
+  const title = it.title ?? "";
+
+  // 共通: ふるさと納税は検索文脈ではだいたいノイズ
+  let score = /ふるさと納税/.test(title) ? -5 : 0;
+
+  if (mode === "gift") {
+    // ギフトで上げたいワード（強い順）
+    const giftPos = [
+      { re: /(ギフト|贈|贈答|御祝|お祝い|のし|熨斗)/, pts: 6 },
+      { re: /(化粧箱|木箱|箱入り)/, pts: 5 },
+      { re: /(セット|飲み比べ|詰め合わせ)/, pts: 5 },
+      { re: /(限定|御中元|お歳暮|敬老)/, pts: 2 },
+    ];
+    for (const { re, pts } of giftPos) if (re.test(title)) score += pts;
+
+    // 価格帯調整
+    if (it.price != null) {
+      if (it.price >= 3000 && it.price <= 5000) score += 4;   // 3–5k
+      else if (it.price >= 8000 && it.price <= 12000) score += 2; // 8–12k
+      else if (it.price > 15000) score -= 1; // 緩めに
+    }
+  } else {
+    // 通常は単品重視：セット/飲み比べ/本数表記は下げる
+    const normalNeg = [
+      { re: /(セット|飲み比べ|詰め合わせ)/, pts: -8 },
+      { re: /(\b[2-9]本\b|×\d+本)/, pts: -6 }, // 2本以上や×○本表記
+      { re: /(ギフト|のし|熨斗|化粧箱|箱入り)/, pts: -3 },
+    ];
+    for (const { re, pts } of normalNeg) if (re.test(title)) score += pts;
+
+    // 単品らしい語（四合瓶/720ml/一升/1800ml 等）があれば少し上げる
+    if (/(720ml|1800ml|一升|四合)/.test(title)) score += 2;
+
+    // 価格帯調整
+    if (it.price != null) {
+      if (it.price >= 2000 && it.price <= 6000) score += 3;  // 2–6k
+      if (it.price < 1000) score -= 4;                       // 1k未満
+    }
+  }
+
+  return score;
+}
+
 function fallbackItems(): Item[] {
   return [
     {
@@ -134,6 +190,7 @@ function fallbackItems(): Item[] {
       image: null,
       shop: null,
       source: "rakuten",
+        _idx: 0, // フォールバック用
       url: wrapMoshimo("https://search.rakuten.co.jp/search/mall/%E7%8D%BA%E7%A5%AD+39/")
     },
     {
@@ -143,6 +200,7 @@ function fallbackItems(): Item[] {
       image: null,
       shop: null,
       source: "rakuten",
+        _idx: 0, // フォールバック用
       url: wrapMoshimo("https://search.rakuten.co.jp/search/mall/%E4%B9%85%E4%BF%9D%E7%94%B0+%E5%8D%83%E5%AF%BF/")
     },
     {
@@ -152,7 +210,10 @@ function fallbackItems(): Item[] {
       image: null,
       shop: null,
       source: "rakuten",
+        _idx: 0, // フォールバック用
       url: wrapMoshimo("https://search.rakuten.co.jp/search/mall/%E5%85%AB%E6%B5%B7%E5%B1%B1+%E7%89%B9%E5%88%A5%E6%9C%AC%E9%86%B8%E9%80%A0/")
     },
   ];
 }
+
+// ===== モード別スコアリング =====
