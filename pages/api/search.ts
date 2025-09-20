@@ -25,6 +25,8 @@ type RakutenItem = {
 type RakutenResponse = {
   Items?: { Item: RakutenItem }[];
   count?: number;
+  error?: string;
+  error_description?: string;
 };
 
 const RAKUTEN_BASE =
@@ -40,6 +42,7 @@ function wrapMoshimo(targetUrl: string) {
   )}`;
 }
 
+// ========= ここからハンドラ =========
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -56,11 +59,20 @@ export default async function handler(
     )}&hits=20&imageFlag=1`;
 
     const r = await fetch(url, { headers: { "User-Agent": "japanese-sake-ai" } });
+    if (!r.ok) {
+      const txt = await r.text().catch(() => "");
+      return res
+        .status(502)
+        .json({ error: "rakuten_fetch_failed", status: r.status, body: txt.slice(0, 500) });
+    }
+
     const data = (await r.json()) as RakutenResponse;
+    if (data.error) {
+      return res.status(502).json({ error: "rakuten_api_error", detail: data });
+    }
 
     const rawItems = Array.isArray(data.Items) ? data.Items : [];
     const items: Item[] = rawItems.map(({ Item: it }) => {
-      const rawUrl = it.itemUrl; // affiliateUrl は使わず もしも で統一
       const img =
         it.mediumImageUrls?.[0]?.imageUrl ??
         it.smallImageUrls?.[0]?.imageUrl ??
@@ -72,42 +84,83 @@ export default async function handler(
         image: img,
         shop: it.shopName ?? null,
         source: "rakuten",
-        url: wrapMoshimo(rawUrl),
+        // affiliateUrl は使わず、もしもで統一
+        url: wrapMoshimo(it.itemUrl),
       };
     });
 
-    const total = items.length;
     const noFilter = process.env.NO_FILTER === "1";
     const filtered = noFilter ? items : items.filter(passAllRules);
-    const result = filtered.length > 0 ? filtered : [fallbackDassai39()];
 
-    console.log({ q, total, afterFilter: filtered.length, noFilter });
+    // ★ フォールバックを複数に
+    const result = filtered.length > 0 ? filtered : fallbackItems();
+
     return res
       .status(200)
-      .json({ items: result, total, afterFilter: filtered.length, noFilter });
-  } catch (e) {
-    console.error(e);
-    return res.status(500).json({ error: "search_failed" });
+      .json({ items: result, total: items.length, afterFilter: filtered.length, noFilter });
+  } catch (e: any) {
+    console.error("[SEARCH_CATCH]", e);
+    return res.status(500).json({ error: "search_failed", message: String(e?.message ?? e) });
   }
 }
+// ========= ここまでハンドラ =========
 
 function passAllRules(it: Item): boolean {
-  if (it.price != null && (it.price < 900 || it.price > 50000)) return false;
-  const ng = ["セット", "詰め合わせ", "梅酒", "みりん", "焼酎", "ビール"];
+  // 価格帯
+  if (it.price != null && (it.price < 1000 || it.price > 20000)) return false;
+
+  // 箱・ケース・グッズ・他ジャンル除外
+  const ng = [
+    "箱のみ","化粧箱のみ","カートン","ケース","段ボール","専用箱",
+    "お猪口","徳利","ぐい呑","グラス","酒器","袋のみ","ギフト袋",
+    "梅酒","みりん","焼酎","ビール","ワイン"
+  ];
   if (ng.some((w) => it.title.includes(w))) return false;
+
+  // セット系（ギフトモードで解除予定）
+  const setNg = ["セット","飲み比べ","詰め合わせ","3本","5本","6本"];
+  if (process.env.MODE !== "gift" && setNg.some((w) => it.title.includes(w))) return false;
+
+  if (!it.title || !it.image) return false;
+
   return true;
 }
 
-function fallbackDassai39(): Item {
-  return {
-    id: "fallback-dassai-39",
-    title: "【フォールバック】獺祭 純米大吟醸 39",
-    price: null,
-    image: null,
-    shop: null,
-    source: "rakuten",
-    url: wrapMoshimo(
-      "https://search.rakuten.co.jp/search/mall/%E7%8D%BA%E7%A5%AD+39/"
-    ),
-  };
+function fallbackItems(): Item[] {
+  return [
+    {
+      id: "fallback-dassai-39",
+      title: "【フォールバック】獺祭 純米大吟醸 39",
+      price: null,
+      image: null,
+      shop: null,
+      source: "rakuten",
+      url: wrapMoshimo(
+        "https://search.rakuten.co.jp/search/mall/%E7%8D%BA%E7%A5%AD+39/"
+      ),
+    },
+    {
+      id: "fallback-kubota-senju",
+      title: "【フォールバック】久保田 千寿",
+      price: null,
+      image: null,
+      shop: null,
+      source: "rakuten",
+      url: wrapMoshimo(
+        "https://search.rakuten.co.jp/search/mall/%E4%B9%85%E4%BF%9D%E7%94%B0+%E5%8D%83%E5%AF%BF/"
+      ),
+    },
+    {
+      id: "fallback-hakkaisan",
+      title: "【フォールバック】八海山 特別本醸造",
+      price: null,
+      image: null,
+      shop: null,
+      source: "rakuten",
+      url: wrapMoshimo(
+        "https://search.rakuten.co.jp/search/mall/%E5%85%AB%E6%B5%B7%E5%B1%B1+%E7%89%B9%E5%88%A5%E6%9C%AC%E9%86%B8%E9%80%A0/"
+      ),
+    },
+  ];
+}
 }
