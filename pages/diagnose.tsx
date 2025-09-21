@@ -159,7 +159,7 @@ export default function DiagnosePage() {
         <section className="mb-6">
           <p className="mb-2 font-medium">Q2. 味の傾向は？</p>
           <div className="flex gap-2 flex-wrap">
-            {(["dry", "medium", "sweet"] as const).map((k) => (
+            {(["dry", "sweet"] as const).map((k) => (
               <button
                 key={k}
                 className={`border px-3 py-2 rounded ${
