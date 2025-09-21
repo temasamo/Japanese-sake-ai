@@ -89,9 +89,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       noFilter,
       mode,
     });
-  } catch (e: any) {
+  } catch (e: unknown) {
     console.error("[SEARCH_CATCH]", e);
-    return res.status(500).json({ error: "search_failed", message: String(e?.message ?? e) });
+    return res.status(500).json({ error: "search_failed", message: String(e instanceof Error ? e.message : e) });
   }
 }
 
