@@ -66,15 +66,15 @@ export default function DiagnosePage() {
       // mode は用途から決定（ギフト=gift）
       const m = mode; // "normal" | "gift"
       const r = await fetch(`/api/search?q=${encodeURIComponent(query)}&mode=${m}`);
-      const j: any = await r.json();
+      const j: unknown = await r.json();
 
-      if (!r.ok || !j || !Array.isArray(j.items)) {
+      if (!r.ok || !j || typeof j !== "object" || !j || !("items" in j) || !Array.isArray((j as { items: unknown[] }).items)) {
         throw new Error("検索結果を取得できませんでした");
       }
 
       // 予算フィルタ（API側で未対応の場合に備えてクライアントでも絞る）
       const { min, max } = budgetRange(budget);
-      let items: Cand[] = j.items;
+      let items: Cand[] = (j as { items: Cand[] }).items;
       if (typeof min === "number" || typeof max === "number") {
         items = items.filter((it: Cand) => {
           if (it.price == null) return false;
@@ -86,8 +86,8 @@ export default function DiagnosePage() {
 
       // 上位5件だけ採用（API内のスコアリング結果をそのまま使う）
       setCands(items.slice(0, 5));
-    } catch (e: any) {
-      setError(e?.message ?? String(e));
+    } catch (e: unknown) {
+      setError((e instanceof Error) ? e.message : String(e));
     } finally {
       setLoading(false);
     }

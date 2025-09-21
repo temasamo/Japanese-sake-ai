@@ -87,7 +87,7 @@ export default async function handler(_req: NextApiRequest, res: NextApiResponse
   const top5 = [...uniq.values()]
     .sort((a, b) => b._pop - a._pop)
     .slice(0, 5)
-    .map(({ _pop: _unused, ...rest }) => rest);
+    .map(({ _pop: _unused, ...rest }) => rest); // eslint-disable-line @typescript-eslint/no-unused-vars
 
   cache = { at: Date.now(), items: top5 };
   res.status(200).json({ items: top5, cached: false });
