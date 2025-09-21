@@ -40,10 +40,10 @@ export default function DiagnosePage() {
   // 検索へ渡す仮のクエリ（後で賢くする）
   const query = useMemo(() => {
     const parts: string[] = [];
-    if (taste) parts.push(tasteJa[taste]);
+    if (taste === "dry") parts.push("辛口");
+    if (taste === "sweet") parts.push("甘口");
     if (purpose === "gift") parts.push("ギフト");
-    // MVP：まずはここを固定ワードでOK（後で学習させる）
-    parts.push("純米吟醸");
+    parts.push("純米吟醸"); // 仮のベース語
     return parts.join(" ");
   }, [purpose, taste]);
 
@@ -63,18 +63,25 @@ export default function DiagnosePage() {
     setCands(null);
     setLoading(true);
     try {
-      // mode は用途から決定（ギフト=gift）
       const m = mode; // "normal" | "gift"
-      const r = await fetch(`/api/search?q=${encodeURIComponent(query)}&mode=${m}`);
-      const j: unknown = await r.json();
+      const { min, max } = budgetRange(budget);
 
+      // ▼ 価格レンジを API へ渡す（サーバー側で絞って返してもらう）
+      const params = new URLSearchParams({
+        q: query,
+        mode: m,
+        ...(typeof min === "number" ? { minPrice: String(min) } : {}),
+        ...(typeof max === "number" ? { maxPrice: String(max) } : {}),
+      });
+      const r = await fetch(`/api/search?${params.toString()}`);
+      const j: unknown = await r.json();
       if (!r.ok || !j || typeof j !== "object" || !j || !("items" in j) || !Array.isArray((j as { items: unknown[] }).items)) {
         throw new Error("検索結果を取得できませんでした");
       }
 
-      // 予算フィルタ（API側で未対応の場合に備えてクライアントでも絞る）
-      const { min, max } = budgetRange(budget);
       let items: Cand[] = (j as { items: Cand[] }).items;
+
+      // 念のためクライアントでも二重チェック
       if (typeof min === "number" || typeof max === "number") {
         items = items.filter((it: Cand) => {
           if (it.price == null) return false;
@@ -84,8 +91,14 @@ export default function DiagnosePage() {
         });
       }
 
-      // 上位5件だけ採用（API内のスコアリング結果をそのまま使う）
-      setCands(items.slice(0, 5));
+      // ▼ 0件ならフォールバック：予算無視で上位5件だけ表示
+      if (items.length === 0 && Array.isArray((j as { items: Cand[] }).items)) {
+        items = (j as { items: Cand[] }).items.slice(0, 5);
+      } else {
+        items = items.slice(0, 5);
+      }
+
+      setCands(items);
     } catch (e: unknown) {
       setError((e instanceof Error) ? e.message : String(e));
     } finally {

@@ -47,10 +47,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const mode = (String(req.query.mode || "normal") as "normal" | "gift");
     if (!q) return res.status(400).json({ error: "q is required" });
 
+    // 価格レンジパラメータを受け取り
+    const minPrice = Number(req.query.minPrice ?? "");
+    const maxPrice = Number(req.query.maxPrice ?? "");
+    const priceParams = [
+      Number.isFinite(minPrice) ? `minPrice=${minPrice}` : "",
+      Number.isFinite(maxPrice) ? `maxPrice=${maxPrice}` : "",
+    ].filter(Boolean).join("&");
+
     const appId = process.env.RAKUTEN_APP_ID;
     if (!appId) return res.status(500).json({ error: "RAKUTEN_APP_ID missing" });
 
-    const url = `${RAKUTEN_BASE}?applicationId=${appId}&keyword=${encodeURIComponent(q)}&hits=20&imageFlag=1`;
+    const url = `${RAKUTEN_BASE}?applicationId=${appId}&keyword=${encodeURIComponent(q)}&hits=30&imageFlag=1${priceParams ? `&${priceParams}` : ""}`;
     const r = await fetch(url, { headers: { "User-Agent": "japanese-sake-ai" } });
     if (!r.ok) {
       const txt = await r.text().catch(() => "");
