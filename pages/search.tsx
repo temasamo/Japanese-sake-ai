@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import Image from "next/image";
 
 type Item = {
@@ -94,8 +95,11 @@ export default function SearchPage() {
           className="border px-2 py-1 flex-1"
           placeholder="例：獺祭 39 / 純米大吟醸"
         />
+        <Link href="/diagnose" className="border px-3">診断する</Link>
         <button onClick={() => void run(q)} className="border px-3">検索</button>
+        <Link href="/diagnose" className="border px-3">診断する</Link>
         <button onClick={() => { setQ("獺祭 39"); void run("獺祭 39"); }} className="border px-3">テスト</button>
+        <Link href="/diagnose" className="border px-3">診断する</Link>
         <button
           onClick={() => setMode(m => (m === "normal" ? "gift" : "normal"))}
           className="border px-3"
