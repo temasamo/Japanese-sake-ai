@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 type Purpose = "gift" | "self";
 type Taste = "dry" | "medium" | "sweet";
@@ -26,6 +27,10 @@ export default function DiagnosePage() {
   const [purpose, setPurpose] = useState<Purpose | null>(null);
   const [taste, setTaste] = useState<Taste | null>(null);
   const [budget, setBudget] = useState<Budget | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  type Cand = { id:string; title:string; price:number|null; image:string|null; shop:string|null; url:string };
+  const [cands, setCands] = useState<Cand[] | null>(null);
 
   const mode: "normal" | "gift" = useMemo(
     () => (purpose === "gift" ? "gift" : "normal"),
@@ -42,6 +47,52 @@ export default function DiagnosePage() {
     return parts.join(" ");
   }, [purpose, taste]);
 
+  // 予算レンジ関数を追加
+  function budgetRange(b: Budget | null): {min?:number; max?:number} {
+    if (!b) return {};
+    if (b === "u3") return { max: 3000 };
+    if (b === "b3_5") return { min: 3000, max: 5000 };
+    if (b === "b5_8") return { min: 5000, max: 8000 };
+    if (b === "b8_12") return { min: 8000, max: 12000 };
+    return { min: 12000 }; // o12
+  }
+
+  // 診断実行（/api/search を呼んで5件に整形）
+  async function runDiagnosis() {
+    setError(null);
+    setCands(null);
+    setLoading(true);
+    try {
+      // mode は用途から決定（ギフト=gift）
+      const m = mode; // "normal" | "gift"
+      const r = await fetch(`/api/search?q=${encodeURIComponent(query)}&mode=${m}`);
+      const j: any = await r.json();
+
+      if (!r.ok || !j || !Array.isArray(j.items)) {
+        throw new Error("検索結果を取得できませんでした");
+      }
+
+      // 予算フィルタ（API側で未対応の場合に備えてクライアントでも絞る）
+      const { min, max } = budgetRange(budget);
+      let items: Cand[] = j.items;
+      if (typeof min === "number" || typeof max === "number") {
+        items = items.filter((it: Cand) => {
+          if (it.price == null) return false;
+          if (typeof min === "number" && it.price < min) return false;
+          if (typeof max === "number" && it.price > max) return false;
+          return true;
+        });
+      }
+
+      // 上位5件だけ採用（API内のスコアリング結果をそのまま使う）
+      setCands(items.slice(0, 5));
+    } catch (e: any) {
+      setError(e?.message ?? String(e));
+    } finally {
+      setLoading(false);
+    }
+  }
+
   const canNext = (s: Step): boolean => {
     if (s === 0) return purpose !== null;
     if (s === 1) return taste !== null;
@@ -54,6 +105,8 @@ export default function DiagnosePage() {
     setPurpose(null);
     setTaste(null);
     setBudget(null);
+    setCands(null);
+    setError(null);
   };
 
   return (
@@ -144,10 +197,13 @@ export default function DiagnosePage() {
           <div className="flex gap-2 flex-wrap">
             <Link
               href={`/search?q=${encodeURIComponent(query)}&mode=${mode}`}
-              className="border px-4 py-2 rounded bg-black text-white"
+              className="border px-4 py-2 rounded"
             >
               この条件で探す（/searchへ）
             </Link>
+            <button className="border px-4 py-2 rounded bg-black text-white" onClick={runDiagnosis}>
+              この条件で診断（5件表示）
+            </button>
             <button className="border px-4 py-2 rounded" onClick={reset}>
               やり直す
             </button>
@@ -157,6 +213,43 @@ export default function DiagnosePage() {
             ※MVP版：ここでは検索は実行せず、条件を /search に受け渡すだけです。候補5件の自動提示や最安値連動は次のステップで追加します。
           </p>
         </section>
+      )}
+
+      {/* 結果表示 */}
+      {loading && <div className="mt-4 text-sm text-gray-600">診断中…</div>}
+      {error && <div className="mt-4 text-sm text-red-600">{error}</div>}
+      {!loading && cands && (
+        <ul className="mt-4 grid gap-3">
+          {cands.length === 0 && (
+            <li className="text-sm text-gray-600">条件に合う商品が見つかりませんでした。予算やキーワードを少し緩めてみてください。</li>
+          )}
+          {cands.map((it) => (
+            <li key={it.id} className="border p-3 rounded flex gap-3 items-start">
+              {it.image ? (
+                <Image src={it.image} alt={it.title} width={96} height={96} />
+              ) : (
+                <div className="w-[96px] h-[96px] bg-gray-100 grid place-items-center text-xs">No Image</div>
+              )}
+              <div className="flex-1">
+                <div className="font-medium mb-1">{it.title}</div>
+                <div className="text-sm text-gray-700 mb-1">{it.shop ?? "-"}</div>
+                <div className="text-sm mb-2">{it.price != null ? `¥${it.price.toLocaleString()}` : "-"}</div>
+
+                {/* 楽天（もしも）リンク：まずは既存の it.url を /api/out 経由で */}
+                <a
+                  className="inline-block text-blue-600 underline"
+                  href={`/api/out?url=${encodeURIComponent(it.url)}`}
+                  target="_blank" rel="noopener noreferrer"
+                >
+                  購入へ（楽天）
+                </a>
+
+                {/* 将来：ここに Yahoo/Amazon の横並びリンクを足す */}
+                {/* <div className="text-xs mt-1 text-gray-600">他のモール: Yahoo / Amazon（近日）</div> */}
+              </div>
+            </li>
+          ))}
+        </ul>
       )}
 
       {/* ナビゲーション */}
