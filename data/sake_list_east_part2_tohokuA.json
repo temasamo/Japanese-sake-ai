@@ -1,0 +1,93 @@
+[
+    {
+      "brand_name": "田酒",
+      "product_name": "特別純米",
+      "type": "特別純米",
+      "region": "青森県青森市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "控えめながらも上品な米の香り",
+        "palate": "しっかりとした旨味とふくらみが広がる辛口タイプ",
+        "finish": "後味はキレ良く、清涼感のある余韻",
+        "impression": "「米の旨味」を追求した田酒の原点。地酒ファンに根強い人気。"
+      },
+      "taste_score": 4.6,
+      "aroma_score": 4.0
+    },
+    {
+      "brand_name": "陸奥八仙",
+      "product_name": "ISARIBI 純米吟醸",
+      "type": "純米吟醸",
+      "region": "青森県八戸市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "フルーティーで華やか、リンゴや洋ナシの香り",
+        "palate": "やや甘口で口当たりなめらか、酸味とのバランスが絶妙",
+        "finish": "余韻は長く、心地よい果実感が続く",
+        "impression": "青森を代表する新世代の香り系日本酒。女性人気も高い。"
+      },
+      "taste_score": 4.4,
+      "aroma_score": 4.7
+    },
+    {
+      "brand_name": "豊盃",
+      "product_name": "純米吟醸",
+      "type": "純米吟醸",
+      "region": "青森県弘前市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "メロンや青リンゴのような清涼感ある香り",
+        "palate": "中口でコクがあり、旨味がじんわりと広がる",
+        "finish": "まろやかで上品な後味",
+        "impression": "青森産米「豊盃米」を使用。地元で愛される上質な食中酒。"
+      },
+      "taste_score": 4.5,
+      "aroma_score": 4.4
+    },
+    {
+      "brand_name": "南部美人",
+      "product_name": "純米吟醸",
+      "type": "純米吟醸",
+      "region": "岩手県二戸市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "やや華やかで穏やかな吟醸香",
+        "palate": "透明感のある味わいで、上品な酸味と旨味が調和",
+        "finish": "すっきりとした余韻で食事を引き立てる",
+        "impression": "国際評価も高い岩手代表銘柄。和食全般に合わせやすい万能タイプ。"
+      },
+      "taste_score": 4.4,
+      "aroma_score": 4.3
+    },
+    {
+      "brand_name": "赤武",
+      "product_name": "純米",
+      "type": "純米酒",
+      "region": "岩手県盛岡市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "爽やかで若々しい果実香、グレープフルーツのような印象",
+        "palate": "フレッシュでジューシーな旨味、やや甘口",
+        "finish": "軽やかで飲み飽きしない後口",
+        "impression": "若き蔵人たちが復活させた気鋭のブランド。食前・食中酒に最適。"
+      },
+      "taste_score": 4.3,
+      "aroma_score": 4.5
+    },
+    {
+      "brand_name": "月の輪",
+      "product_name": "純米酒",
+      "type": "純米酒",
+      "region": "岩手県紫波町",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "穏やかで米の香りを中心とした落ち着いた香調",
+        "palate": "辛口でスッと入る飲み心地、やや酸が心地よい",
+        "finish": "清潔感のある後味で、燗でも美味しい",
+        "impression": "「毎日飲める良酒」をコンセプトにした伝統派。岩手の地酒らしい誠実な味。"
+      },
+      "taste_score": 4.0,
+      "aroma_score": 3.8
+    }
+  ]
+  

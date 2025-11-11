@@ -1,0 +1,138 @@
+[
+    {
+      "brand_name": "繁桝",
+      "product_name": "純米大吟醸 雄町",
+      "type": "純米大吟醸",
+      "region": "福岡県八女市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "穏やかで上品な吟醸香、白桃や米の甘い香り",
+        "palate": "なめらかで旨味と酸味のバランスが取れた中口",
+        "finish": "清らかでスッと消える後味",
+        "impression": "八女の柔らかい水を生かした上品な味わい。福岡を代表する銘酒。"
+      },
+      "taste_score": 4.6,
+      "aroma_score": 4.3
+    },
+    {
+      "brand_name": "庭のうぐいす",
+      "product_name": "純米吟醸 なつがこい",
+      "type": "純米吟醸",
+      "region": "福岡県久留米市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "フルーティーで爽やかな香り、青リンゴやメロンの印象",
+        "palate": "軽やかでみずみずしく、優しい甘味と酸味の調和",
+        "finish": "清涼感のある爽やかな余韻",
+        "impression": "女性にも人気のモダン福岡酒。軽快で食中にも合わせやすい。"
+      },
+      "taste_score": 4.5,
+      "aroma_score": 4.7
+    },
+    {
+      "brand_name": "東一",
+      "product_name": "純米吟醸 山田錦",
+      "type": "純米吟醸",
+      "region": "佐賀県嬉野市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "上品で控えめな吟醸香、リンゴやナシの印象",
+        "palate": "やや辛口で透明感のある旨味、酸が心地よい",
+        "finish": "滑らかでキレのある後味",
+        "impression": "佐賀の名蔵。食中に寄り添うスタンダードな美酒。"
+      },
+      "taste_score": 4.4,
+      "aroma_score": 4.2
+    },
+    {
+      "brand_name": "鍋島",
+      "product_name": "純米大吟醸",
+      "type": "純米大吟醸",
+      "region": "佐賀県鹿島市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "華やかで濃厚なフルーツ香、パイナップルやメロンの印象",
+        "palate": "ジューシーな甘味と酸味のバランスが良く、飲みやすい",
+        "finish": "フルーティーで透明感のある後味",
+        "impression": "全国新酒鑑評会でも高評価。佐賀のスター蔵。"
+      },
+      "taste_score": 4.9,
+      "aroma_score": 5.0
+    },
+    {
+      "brand_name": "六十餘洲",
+      "product_name": "純米吟醸 山田錦",
+      "type": "純米吟醸",
+      "region": "長崎県波佐見町",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "控えめで清らかな香り、白米とハーブの印象",
+        "palate": "やや辛口で、すっきりとした透明感ある味わい",
+        "finish": "軽快にキレる後味",
+        "impression": "長崎の地酒代表。派手さはないが飽きのこない優等生的存在。"
+      },
+      "taste_score": 4.3,
+      "aroma_score": 3.9
+    },
+    {
+      "brand_name": "香露",
+      "product_name": "特別純米",
+      "type": "特別純米",
+      "region": "熊本県熊本市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "柔らかい吟醸香と米の香り、ほのかにバニラの印象",
+        "palate": "まろやかな旨味と程よい酸、なめらかな舌触り",
+        "finish": "優しくフェードアウトする後味",
+        "impression": "熊本酵母発祥の蔵。バランスの取れた教科書的な日本酒。"
+      },
+      "taste_score": 4.5,
+      "aroma_score": 4.1
+    },
+    {
+      "brand_name": "美少年",
+      "product_name": "純米吟醸",
+      "type": "純米吟醸",
+      "region": "熊本県菊池市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "華やかで爽やかな香り、メロンやリンゴの印象",
+        "palate": "やや甘口でなめらか、軽快で親しみやすい味わい",
+        "finish": "フルーティーで短い余韻",
+        "impression": "熊本の若い世代に人気。柔らかく飲みやすいモダン酒。"
+      },
+      "taste_score": 4.3,
+      "aroma_score": 4.5
+    },
+    {
+      "brand_name": "西の関",
+      "product_name": "純米酒",
+      "type": "純米酒",
+      "region": "大分県国東市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "穏やかで米の香り中心、やや熟成感あり",
+        "palate": "やさしい甘味と丸みのある旨味、ぬる燗で味が広がる",
+        "finish": "やわらかく自然に消える余韻",
+        "impression": "大分の定番酒。地元料理と自然に寄り添う温かみのある味わい。"
+      },
+      "taste_score": 4.2,
+      "aroma_score": 3.8
+    },
+    {
+      "brand_name": "天賦",
+      "product_name": "純米吟醸",
+      "type": "純米吟醸",
+      "region": "鹿児島県日置市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "華やかで甘い香り、南国フルーツや蜂蜜のニュアンス",
+        "palate": "柔らかい甘味と酸味が広がるモダンな味わい",
+        "finish": "フルーティーでなめらかな後味",
+        "impression": "焼酎文化の地・鹿児島に誕生した新潮流。フルーティーな挑戦酒。"
+      },
+      "taste_score": 4.7,
+      "aroma_score": 4.8
+    }
+  ]
+  

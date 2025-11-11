@@ -1,0 +1,153 @@
+[
+    {
+      "brand_name": "来福",
+      "product_name": "純米吟醸 愛山",
+      "type": "純米吟醸",
+      "region": "茨城県筑西市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "華やかな吟醸香、バナナやメロンのような甘い香り",
+        "palate": "柔らかい甘みと旨味が広がり、酸味が全体を引き締める",
+        "finish": "軽やかで透明感のある後味",
+        "impression": "酒米「愛山」の個性を生かした上品な一本。女性人気も高い。"
+      },
+      "taste_score": 4.5,
+      "aroma_score": 4.7
+    },
+    {
+      "brand_name": "武勇",
+      "product_name": "純米酒",
+      "type": "純米酒",
+      "region": "茨城県結城市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "穏やかな米の香り、やや熟成感のある香調",
+        "palate": "辛口で厚みのある旨味が特徴、燗映えする味わい",
+        "finish": "しっかりとしたキレで、飲みごたえあり",
+        "impression": "伝統的な酒造りを守る結城の地酒。食中酒として定評がある。"
+      },
+      "taste_score": 4.2,
+      "aroma_score": 3.9
+    },
+    {
+      "brand_name": "鳳凰美田",
+      "product_name": "純米大吟醸 碧判",
+      "type": "純米大吟醸",
+      "region": "栃木県小山市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "パイナップルやライチを思わせるトロピカルな香り",
+        "palate": "濃密で丸みのある旨味が広がり、酸味が繊細に支える",
+        "finish": "ふくよかで長い余韻",
+        "impression": "全国的にも人気の高い香り系日本酒。食後にも最適。"
+      },
+      "taste_score": 4.8,
+      "aroma_score": 4.9
+    },
+    {
+      "brand_name": "仙禽",
+      "product_name": "オーガニック ナチュール",
+      "type": "純米酒",
+      "region": "栃木県さくら市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "乳酸由来のヨーグルトのような香りと果実香が混じる",
+        "palate": "ナチュラルで酸味が際立つ独特の味わい",
+        "finish": "爽やかでクリーンな余韻",
+        "impression": "自然派志向の新感覚日本酒。個性的でモダンな印象。"
+      },
+      "taste_score": 4.4,
+      "aroma_score": 4.6
+    },
+    {
+      "brand_name": "水芭蕉",
+      "product_name": "純米吟醸",
+      "type": "純米吟醸",
+      "region": "群馬県川場村",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "爽やかで控えめな吟醸香、リンゴや柑橘系の香り",
+        "palate": "軽快で繊細、透明感のある味わい",
+        "finish": "短めでクリーンな余韻",
+        "impression": "群馬を代表するブランド。清涼感重視のモダンな辛口。"
+      },
+      "taste_score": 4.3,
+      "aroma_score": 4.0
+    },
+    {
+      "brand_name": "神亀",
+      "product_name": "純米酒 辛口",
+      "type": "純米酒",
+      "region": "埼玉県蓮田市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "穏やかで熟成感を伴う香り",
+        "palate": "辛口で深みのある旨味、コクと酸味のバランスが良い",
+        "finish": "しっかりとしたキレがあり、燗で真価を発揮",
+        "impression": "純米酒の草分け的存在。通好みのクラシックスタイル。"
+      },
+      "taste_score": 4.2,
+      "aroma_score": 3.7
+    },
+    {
+      "brand_name": "東薫",
+      "product_name": "純米吟醸 夢まつり",
+      "type": "純米吟醸",
+      "region": "千葉県香取市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "やや華やかでリンゴのような香り",
+        "palate": "やわらかい甘味と軽快な酸味が特徴",
+        "finish": "清涼感のある後味で軽やかに締める",
+        "impression": "関東で珍しい香り系の地酒。食前酒にも向く。"
+      },
+      "taste_score": 4.3,
+      "aroma_score": 4.2
+    },
+    {
+      "brand_name": "澤乃井",
+      "product_name": "純米吟醸",
+      "type": "純米吟醸",
+      "region": "東京都青梅市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "すっきりとした吟醸香、控えめながらも上品",
+        "palate": "辛口で清らかな味わい、軽やかな口当たり",
+        "finish": "爽やかにキレる後味",
+        "impression": "多摩川の名水を使用した東京の名酒。食中に最適。"
+      },
+      "taste_score": 4.1,
+      "aroma_score": 3.9
+    },
+    {
+      "brand_name": "天青",
+      "product_name": "純米吟醸 風露",
+      "type": "純米吟醸",
+      "region": "神奈川県茅ヶ崎市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "マスカットや白桃を思わせる軽やかな香り",
+        "palate": "柔らかい口当たりと控えめな甘味が心地よい",
+        "finish": "やや短く爽やかに切れる",
+        "impression": "湘南の風土を感じる爽やか系日本酒。軽やかなモダンタイプ。"
+      },
+      "taste_score": 4.2,
+      "aroma_score": 4.3
+    },
+    {
+      "brand_name": "いづみ橋",
+      "product_name": "純米吟醸 トンボラベル",
+      "type": "純米吟醸",
+      "region": "神奈川県海老名市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "柑橘やハーブのような爽やかさのある香り",
+        "palate": "ドライでミネラル感があり、食中向きの辛口",
+        "finish": "キレがよく清涼感が残る",
+        "impression": "自家栽培米を使用する“循環型酒造り”で知られる。自然派辛口。"
+      },
+      "taste_score": 4.3,
+      "aroma_score": 4.1
+    }
+  ]
+  

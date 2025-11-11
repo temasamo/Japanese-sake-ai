@@ -1,0 +1,213 @@
+[
+    {
+      "brand_name": "松の司",
+      "product_name": "純米大吟醸 AZOLLA 50",
+      "type": "純米大吟醸",
+      "region": "滋賀県竜王町",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "穏やかで気品のある香り、白い花とリンゴのニュアンス",
+        "palate": "やわらかく伸びのある旨味、酸の切れが心地よい",
+        "finish": "透明感のある余韻で全体が整う",
+        "impression": "滋賀を代表する端正な味わい。食中酒としても完成度が高い。"
+      },
+      "taste_score": 4.5,
+      "aroma_score": 4.3
+    },
+    {
+      "brand_name": "笑四季",
+      "product_name": "Sensation 白ラベル",
+      "type": "純米吟醸",
+      "region": "滋賀県甲賀市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "トロピカルフルーツと乳酸の香りが複雑に絡む",
+        "palate": "甘味と酸味のコントラストが際立つモダンな味わい",
+        "finish": "軽やかにフェードアウトする後味",
+        "impression": "新世代の滋賀酒。個性的でフルーティーな香り系。"
+      },
+      "taste_score": 4.4,
+      "aroma_score": 4.6
+    },
+    {
+      "brand_name": "澤屋まつもと",
+      "product_name": "守破離 五百万石",
+      "type": "純米酒",
+      "region": "京都府伏見区",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "控えめながらも清涼感のある香り、白桃とハーブの印象",
+        "palate": "軽快でミネラル感のある旨味、酸が引き締める",
+        "finish": "短くキレのある後味",
+        "impression": "伏見らしい柔らかさに現代的な透明感を加えた名作。"
+      },
+      "taste_score": 4.3,
+      "aroma_score": 4.0
+    },
+    {
+      "brand_name": "玉乃光",
+      "product_name": "純米吟醸 酒魂",
+      "type": "純米吟醸",
+      "region": "京都府伏見区",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "華やかで芳醇な吟醸香、熟した果実のような香り",
+        "palate": "しっかりとした旨味とコクがあり、辛口で引き締まる",
+        "finish": "余韻は力強くもバランスが良い",
+        "impression": "伏見を代表する濃厚タイプ。燗でも冷でも安定感抜群。"
+      },
+      "taste_score": 4.5,
+      "aroma_score": 4.4
+    },
+    {
+      "brand_name": "英勲",
+      "product_name": "純米大吟醸 古都千年",
+      "type": "純米大吟醸",
+      "region": "京都府京都市伏見区",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "リンゴや洋梨の香り、穏やかで上品",
+        "palate": "軽やかで透明感のある旨味、酸味が全体をまとめる",
+        "finish": "柔らかい余韻が心地よい",
+        "impression": "京都の食文化に寄り添うエレガントな味わい。"
+      },
+      "taste_score": 4.4,
+      "aroma_score": 4.3
+    },
+    {
+      "brand_name": "春鹿",
+      "product_name": "純米吟醸 超辛口",
+      "type": "純米吟醸",
+      "region": "奈良県奈良市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "爽やかな香り、青リンゴやハーブのニュアンス",
+        "palate": "シャープでドライな辛口、旨味とのバランスが良い",
+        "finish": "キレのある後味で飲み疲れしない",
+        "impression": "辛口日本酒の代名詞的存在。刺身や天ぷらと好相性。"
+      },
+      "taste_score": 4.6,
+      "aroma_score": 4.1
+    },
+    {
+      "brand_name": "梅乃宿",
+      "product_name": "純米吟醸",
+      "type": "純米吟醸",
+      "region": "奈良県葛城市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "華やかで甘やかな吟醸香、バナナやメロンの香り",
+        "palate": "ふくよかで丸みのある甘味と酸味の調和",
+        "finish": "なめらかな後味で長い余韻が続く",
+        "impression": "奈良を代表するフルーティー系。女性や初心者にも人気。"
+      },
+      "taste_score": 4.5,
+      "aroma_score": 4.7
+    },
+    {
+      "brand_name": "黒牛",
+      "product_name": "純米酒",
+      "type": "純米酒",
+      "region": "和歌山県海南市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "穏やかで米の香り中心、やや熟成感あり",
+        "palate": "しっかりとした旨味と酸のバランス、やや辛口",
+        "finish": "コクが残る厚みのある余韻",
+        "impression": "和歌山の海の幸と抜群の相性を誇る食中酒。"
+      },
+      "taste_score": 4.3,
+      "aroma_score": 3.9
+    },
+    {
+      "brand_name": "紀土",
+      "product_name": "純米吟醸",
+      "type": "純米吟醸",
+      "region": "和歌山県海南市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "フルーティーで華やか、柑橘やリンゴの香り",
+        "palate": "みずみずしい酸味と軽やかな旨味が特徴",
+        "finish": "すっきりとした後味で飲みやすい",
+        "impression": "若手蔵人が造るモダンスタイル。和食にも洋食にも合う。"
+      },
+      "taste_score": 4.4,
+      "aroma_score": 4.5
+    },
+    {
+      "brand_name": "秋鹿",
+      "product_name": "純米酒 山廃",
+      "type": "純米酒",
+      "region": "大阪府豊能郡能勢町",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "熟成感のある落ち着いた香り、木やナッツのニュアンス",
+        "palate": "酸味と旨味のバランスが取れた濃醇タイプ",
+        "finish": "じんわりと温かみのある余韻が続く",
+        "impression": "大阪の山里が生む自然派の名酒。燗で味が広がる。"
+      },
+      "taste_score": 4.2,
+      "aroma_score": 4.0
+    },
+    {
+      "brand_name": "剣菱",
+      "product_name": "黒松 剣菱",
+      "type": "本醸造",
+      "region": "兵庫県神戸市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "熟成由来の穏やかな香り、カカオやナッツのニュアンス",
+        "palate": "辛口で厚みのある旨味、燗でコクが増す",
+        "finish": "力強く、長く続く余韻",
+        "impression": "江戸時代から愛される伝統の味。重厚なクラシックタイプ。"
+      },
+      "taste_score": 4.4,
+      "aroma_score": 3.8
+    },
+    {
+      "brand_name": "白鶴",
+      "product_name": "超特撰 白鶴 吟醸",
+      "type": "吟醸酒",
+      "region": "兵庫県神戸市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "華やかな吟醸香とフルーティーな香り立ち",
+        "palate": "軽やかでスムーズな飲み口、やや甘口寄り",
+        "finish": "爽やかでキレのある余韻",
+        "impression": "大手蔵ながら吟醸品質を実現。ギフトにも人気。"
+      },
+      "taste_score": 4.1,
+      "aroma_score": 4.3
+    },
+    {
+      "brand_name": "白鷹",
+      "product_name": "特別純米 超辛口",
+      "type": "特別純米",
+      "region": "兵庫県西宮市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "控えめで清らかな香り、ほのかに米の甘い香気",
+        "palate": "シャープな辛口で、口当たりは軽やか",
+        "finish": "後味は短くクリーン",
+        "impression": "宮水仕込みによる正統派辛口。日常酒としても優秀。"
+      },
+      "taste_score": 4.3,
+      "aroma_score": 3.9
+    },
+    {
+      "brand_name": "灘一",
+      "product_name": "純米酒",
+      "type": "純米酒",
+      "region": "兵庫県西宮市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "穏やかな香り、米の旨味を感じる香調",
+        "palate": "やや辛口でコクのある味わい",
+        "finish": "スッと消える後味で飲み飽きしない",
+        "impression": "地元で根強い人気の灘酒。毎日の晩酌に最適。"
+      },
+      "taste_score": 4.0,
+      "aroma_score": 3.7
+    }
+  ]
+  

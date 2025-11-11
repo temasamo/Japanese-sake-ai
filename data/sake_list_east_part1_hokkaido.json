@@ -1,0 +1,78 @@
+[
+    {
+      "brand_name": "男山",
+      "product_name": "純米大吟醸",
+      "type": "純米大吟醸",
+      "region": "北海道旭川市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "フルーティーで華やか、リンゴやメロンのような香り",
+        "palate": "キレのある辛口で、米の旨味がしっかりと感じられる",
+        "finish": "爽やかで透明感のある後味",
+        "impression": "北海道を代表する王道の辛口。冷やして寿司や刺身と相性抜群。"
+      },
+      "taste_score": 4.5,
+      "aroma_score": 4.4
+    },
+    {
+      "brand_name": "国稀",
+      "product_name": "北海鬼ころし",
+      "type": "本醸造",
+      "region": "北海道増毛町",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "穏やかで米の香りを感じるクラシックな香り",
+        "palate": "やや辛口で、しっかりとしたコクと深みのある味わい",
+        "finish": "すっきりと切れる後味",
+        "impression": "寒冷地ならではのキレのある味。燗酒にも向く万能型。"
+      },
+      "taste_score": 4.2,
+      "aroma_score": 3.8
+    },
+    {
+      "brand_name": "北の誉",
+      "product_name": "純米吟醸",
+      "type": "純米吟醸",
+      "region": "北海道小樽市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "やや控えめな吟醸香で、上品な香り立ち",
+        "palate": "柔らかな口当たりとふくらみのある旨味",
+        "finish": "スムーズで軽快な後口",
+        "impression": "地元小樽の海の幸と好相性。和食全般に合わせやすい一本。"
+      },
+      "taste_score": 4.3,
+      "aroma_score": 4.0
+    },
+    {
+      "brand_name": "北の勝",
+      "product_name": "大海",
+      "type": "本醸造",
+      "region": "北海道根室市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "落ち着いた米の香り",
+        "palate": "やや辛口で厚みのある味わい、魚介との相性が良い",
+        "finish": "しっかりとしたキレで飲み疲れしない",
+        "impression": "漁師町・根室の地酒。道東の風土を感じる辛口タイプ。"
+      },
+      "taste_score": 4.1,
+      "aroma_score": 3.9
+    },
+    {
+      "brand_name": "金滴",
+      "product_name": "純米酒",
+      "type": "純米酒",
+      "region": "北海道新十津川町",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "ふんわりとした穀物香と優しい米の香り",
+        "palate": "旨味と酸味のバランスが良く、温度帯で表情が変わる",
+        "finish": "なめらかで自然な余韻",
+        "impression": "冷でも燗でも楽しめるオールラウンダー。地元産米の風味豊か。"
+      },
+      "taste_score": 4.0,
+      "aroma_score": 3.8
+    }
+  ]
+  

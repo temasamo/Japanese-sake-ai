@@ -1,0 +1,123 @@
+[
+    {
+      "brand_name": "一ノ蔵",
+      "product_name": "特別純米酒 辛口",
+      "type": "特別純米",
+      "region": "宮城県大崎市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "穏やかで米の香り中心、ほのかに熟成香を感じる",
+        "palate": "辛口ながら旨味がしっかりとあり、後半に酸のキレが立つ",
+        "finish": "すっきりとした後味で飲み飽きしない",
+        "impression": "伝統的な宮城の食中酒。冷でも燗でも安定した味わい。"
+      },
+      "taste_score": 4.3,
+      "aroma_score": 3.8
+    },
+    {
+      "brand_name": "浦霞",
+      "product_name": "純米吟醸 禅",
+      "type": "純米吟醸",
+      "region": "宮城県塩竈市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "リンゴや白桃のような穏やかで品のある吟醸香",
+        "palate": "柔らかく滑らかな口当たりで上品な甘みと酸味が調和",
+        "finish": "余韻は短く、清らかな印象を残す",
+        "impression": "全国的にも高評価の定番吟醸。上品でバランスの良い一本。"
+      },
+      "taste_score": 4.4,
+      "aroma_score": 4.2
+    },
+    {
+      "brand_name": "新政",
+      "product_name": "No.6 R-type",
+      "type": "純米吟醸",
+      "region": "秋田県秋田市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "トロピカルフルーツやリンゴのように華やかで瑞々しい香り",
+        "palate": "軽快でジューシーな甘み、爽やかな酸が引き締める",
+        "finish": "清涼感のあるキレで非常にモダンな印象",
+        "impression": "新世代の日本酒を象徴するブランド。香り重視派におすすめ。"
+      },
+      "taste_score": 4.7,
+      "aroma_score": 4.9
+    },
+    {
+      "brand_name": "雪の茅舎",
+      "product_name": "純米吟醸",
+      "type": "純米吟醸",
+      "region": "秋田県由利本荘市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "控えめな吟醸香と米の香りが調和",
+        "palate": "旨味がじんわり広がる中口、酸味のバランスが秀逸",
+        "finish": "滑らかで優しい後味が特徴",
+        "impression": "秋田の食文化と調和する落ち着いた一本。温度帯を問わず楽しめる。"
+      },
+      "taste_score": 4.5,
+      "aroma_score": 4.0
+    },
+    {
+      "brand_name": "十四代",
+      "product_name": "純米大吟醸 龍の落とし子",
+      "type": "純米大吟醸",
+      "region": "山形県村山市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "華やかで芳醇、パインや洋ナシを思わせる香り",
+        "palate": "果実のような甘みと滑らかな旨味が口中に広がる",
+        "finish": "余韻は長く、非常に上品な後口",
+        "impression": "入手困難な超人気銘柄。日本酒の芸術品と称される。"
+      },
+      "taste_score": 4.9,
+      "aroma_score": 5.0
+    },
+    {
+      "brand_name": "出羽桜",
+      "product_name": "桜花 吟醸酒",
+      "type": "吟醸酒",
+      "region": "山形県天童市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "華やかな吟醸香が立ち上がり、まるで果実のような香り",
+        "palate": "軽やかで飲みやすく、酸とのバランスが絶妙",
+        "finish": "清涼感のある余韻が続く",
+        "impression": "吟醸ブームを作った先駆け的存在。華やかで親しみやすい味わい。"
+      },
+      "taste_score": 4.4,
+      "aroma_score": 4.6
+    },
+    {
+      "brand_name": "飛露喜",
+      "product_name": "特別純米",
+      "type": "特別純米",
+      "region": "福島県会津坂下町",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "ほのかな吟醸香と心地よい米の香り",
+        "palate": "旨味と酸味が見事に調和した食中酒タイプ",
+        "finish": "キレ良く後味に深みを残す",
+        "impression": "全国的に人気の高い福島の代表酒。完成度の高いバランス型。"
+      },
+      "taste_score": 4.6,
+      "aroma_score": 4.1
+    },
+    {
+      "brand_name": "寫樂",
+      "product_name": "純米吟醸",
+      "type": "純米吟醸",
+      "region": "福島県会津若松市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "メロンやマスカットを思わせるみずみずしい香り",
+        "palate": "フルーティーながらも旨味がしっかりと感じられる",
+        "finish": "キレがあり、余韻は爽やか",
+        "impression": "モダンな香り系日本酒の代表格。初めての人にもおすすめ。"
+      },
+      "taste_score": 4.7,
+      "aroma_score": 4.8
+    }
+  ]
+  

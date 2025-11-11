@@ -1,0 +1,93 @@
+[
+    {
+      "brand_name": "久保田",
+      "product_name": "萬寿",
+      "type": "純米大吟醸",
+      "region": "新潟県長岡市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "落ち着いた吟醸香、メロンや白桃を思わせる上品な香り",
+        "palate": "柔らかく滑らかな口当たり、繊細で奥行きのある旨味",
+        "finish": "静かに消えるようなキレと透明感のある余韻",
+        "impression": "“淡麗辛口”の最高峰として知られる銘酒。贈答用にも最適。"
+      },
+      "taste_score": 4.8,
+      "aroma_score": 4.6
+    },
+    {
+      "brand_name": "八海山",
+      "product_name": "純米吟醸",
+      "type": "純米吟醸",
+      "region": "新潟県南魚沼市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "穏やかで控えめな吟醸香、青リンゴや白い花の香り",
+        "palate": "キレのある辛口で、軽やかかつ安定した味わい",
+        "finish": "短くすっきりとした後味",
+        "impression": "雪解け水のような透明感。日本食全般と高相性の万能酒。"
+      },
+      "taste_score": 4.4,
+      "aroma_score": 3.9
+    },
+    {
+      "brand_name": "越乃寒梅",
+      "product_name": "白ラベル 本醸造",
+      "type": "本醸造",
+      "region": "新潟県新潟市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "清楚で控えめな香り、わずかに米の甘い香り",
+        "palate": "シャープな辛口で、澄んだ味わい",
+        "finish": "クリーンで引き締まった後味",
+        "impression": "新潟淡麗の象徴的存在。冷酒で飲むとキレが際立つ。"
+      },
+      "taste_score": 4.2,
+      "aroma_score": 3.6
+    },
+    {
+      "brand_name": "七賢",
+      "product_name": "純米大吟醸 絹の味",
+      "type": "純米大吟醸",
+      "region": "山梨県北杜市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "華やかでフルーティー、リンゴや梨のような香り",
+        "palate": "やや甘口で柔らかい口当たり、ふくらみのある旨味",
+        "finish": "なめらかで上品な余韻",
+        "impression": "南アルプスの水で仕込まれる清らかな味わい。食中にも合う万能タイプ。"
+      },
+      "taste_score": 4.5,
+      "aroma_score": 4.4
+    },
+    {
+      "brand_name": "真澄",
+      "product_name": "純米吟醸 すずみさけ",
+      "type": "純米吟醸",
+      "region": "長野県諏訪市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "爽やかでフレッシュな香り、柑橘や青リンゴを感じる",
+        "palate": "軽やかで清涼感があり、柔らかい酸が特徴",
+        "finish": "短めでスッと消えるキレの良さ",
+        "impression": "夏限定酒として人気。冷やして軽快に楽しむ一本。"
+      },
+      "taste_score": 4.3,
+      "aroma_score": 4.2
+    },
+    {
+      "brand_name": "大信州",
+      "product_name": "超辛口 純米吟醸",
+      "type": "純米吟醸",
+      "region": "長野県松本市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "控えめで落ち着いた吟醸香、ハーブやミントのニュアンス",
+        "palate": "キレのある超辛口、透明感の中に力強さがある",
+        "finish": "シャープに切れる後味",
+        "impression": "信州の澄んだ空気を感じるようなクリーンな辛口酒。"
+      },
+      "taste_score": 4.5,
+      "aroma_score": 3.9
+    }
+  ]
+  

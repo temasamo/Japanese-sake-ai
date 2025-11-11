@@ -1,0 +1,48 @@
+[
+    {
+      "brand_name": "黎明",
+      "product_name": "純米吟醸",
+      "type": "純米吟醸",
+      "region": "沖縄県名護市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "柔らかく控えめな香り、米の甘味と南国フルーツのニュアンス",
+        "palate": "軽快で酸味のバランスが良く、後味はすっきり",
+        "finish": "短くクリーンなキレで爽やかに終わる",
+        "impression": "泡盛蔵が挑む清酒造り。沖縄の軟水仕込みで軽やかな味わい。"
+      },
+      "taste_score": 4.2,
+      "aroma_score": 4.0
+    },
+    {
+      "brand_name": "美ら咲",
+      "product_name": "純米大吟醸 南の風",
+      "type": "純米大吟醸",
+      "region": "沖縄県糸満市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "華やかでフルーティー、トロピカルフルーツのような香り",
+        "palate": "やや甘口で丸みがあり、柔らかい酸が全体を引き締める",
+        "finish": "やわらかくなめらかな余韻",
+        "impression": "観光客人気の高いギフト酒。華やかで南国らしい個性を表現。"
+      },
+      "taste_score": 4.5,
+      "aroma_score": 4.6
+    },
+    {
+      "brand_name": "OKINAWA SAKE PROJECT",
+      "product_name": "純米吟醸 BLUE ISLAND",
+      "type": "純米吟醸",
+      "region": "沖縄県那覇市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "青リンゴやライムを思わせる爽快な香り",
+        "palate": "ドライでミネラル感のある味わい、酸が際立つ",
+        "finish": "すっきりとした清涼感で終わる",
+        "impression": "本州の酒蔵と連携した共同醸造プロジェクト。新しい沖縄清酒の形。"
+      },
+      "taste_score": 4.3,
+      "aroma_score": 4.4
+    }
+  ]
+  

@@ -1,0 +1,168 @@
+[
+    {
+      "brand_name": "日置桜",
+      "product_name": "純米酒 鳥取誉",
+      "type": "純米酒",
+      "region": "鳥取県鳥取市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "熟成感のある落ち着いた香り、ナッツや穀物のニュアンス",
+        "palate": "しっかりとした酸味と深い旨味、燗映えする濃醇タイプ",
+        "finish": "じんわりと温かい余韻が長く続く",
+        "impression": "山廃仕込みで知られる鳥取の名酒。地元料理との相性抜群。"
+      },
+      "taste_score": 4.5,
+      "aroma_score": 4.0
+    },
+    {
+      "brand_name": "鷹勇",
+      "product_name": "純米吟醸",
+      "type": "純米吟醸",
+      "region": "鳥取県八頭郡若桜町",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "穏やかな吟醸香と米の香りが調和",
+        "palate": "辛口で厚みのある味わい、酸味が全体を引き締める",
+        "finish": "キレのある後味で飲み心地が良い",
+        "impression": "地元で長く愛される辛口系。温度帯で味が変化する奥深さが魅力。"
+      },
+      "taste_score": 4.2,
+      "aroma_score": 3.9
+    },
+    {
+      "brand_name": "李白",
+      "product_name": "特別純米",
+      "type": "特別純米",
+      "region": "島根県松江市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "やや華やかで果実のような香り、上品で清涼感がある",
+        "palate": "柔らかい口当たりで、旨味と酸味のバランスが絶妙",
+        "finish": "軽快なキレとともに上品な余韻が残る",
+        "impression": "出雲地方を代表する酒。料理との相性が幅広い。"
+      },
+      "taste_score": 4.4,
+      "aroma_score": 4.2
+    },
+    {
+      "brand_name": "出雲富士",
+      "product_name": "純米吟醸 神の穂",
+      "type": "純米吟醸",
+      "region": "島根県出雲市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "華やかで芳醇な吟醸香、リンゴやマスカットの香り",
+        "palate": "ジューシーな旨味と酸味が広がり、飲みやすい",
+        "finish": "清らかなキレで締める",
+        "impression": "“縁結びの地酒”として人気。フルーティーでモダンな印象。"
+      },
+      "taste_score": 4.6,
+      "aroma_score": 4.7
+    },
+    {
+      "brand_name": "御前酒",
+      "product_name": "純米吟醸 雄町",
+      "type": "純米吟醸",
+      "region": "岡山県真庭市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "芳醇で深みのある香り、完熟フルーツの印象",
+        "palate": "旨味がしっかりと感じられ、コクと酸味のバランスが良い",
+        "finish": "柔らかく滑らかな余韻",
+        "impression": "“雄町米発祥の地”岡山らしいふくよかな旨口。"
+      },
+      "taste_score": 4.5,
+      "aroma_score": 4.4
+    },
+    {
+      "brand_name": "大典白菊",
+      "product_name": "純米吟醸",
+      "type": "純米吟醸",
+      "region": "岡山県高梁市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "フルーティーで華やか、バナナや白桃を思わせる香り",
+        "palate": "軽やかで優しい甘味、酸が全体をまとめる",
+        "finish": "クリーンで滑らかな後味",
+        "impression": "穏やかで女性的な印象。岡山の柔らかい水を感じる一本。"
+      },
+      "taste_score": 4.3,
+      "aroma_score": 4.5
+    },
+    {
+      "brand_name": "雨後の月",
+      "product_name": "純米大吟醸 月光",
+      "type": "純米大吟醸",
+      "region": "広島県呉市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "華やかで芳醇、洋ナシやリンゴの香り",
+        "palate": "繊細でなめらかな口当たり、旨味と酸味の調和が見事",
+        "finish": "エレガントな余韻が長く続く",
+        "impression": "広島吟醸の代表格。フルーティーで透明感のある味わい。"
+      },
+      "taste_score": 4.8,
+      "aroma_score": 4.9
+    },
+    {
+      "brand_name": "賀茂鶴",
+      "product_name": "純米吟醸",
+      "type": "純米吟醸",
+      "region": "広島県東広島市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "落ち着いた吟醸香、メロンや梨の香り",
+        "palate": "旨味と酸味のバランスが良く、飲みやすい中口",
+        "finish": "やや短めのキレでスッと消える",
+        "impression": "広島の伝統を受け継ぐ穏やかな吟醸。和食全般と好相性。"
+      },
+      "taste_score": 4.3,
+      "aroma_score": 4.1
+    },
+    {
+      "brand_name": "富久長",
+      "product_name": "純米吟醸 八反草",
+      "type": "純米吟醸",
+      "region": "広島県東広島市安芸津町",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "フローラルで清涼感のある香り、柑橘やハーブの印象",
+        "palate": "軽やかでドライ、酸味が際立つ爽快な味わい",
+        "finish": "キレのあるすっきりとした後味",
+        "impression": "女性杜氏が造るモダンな辛口。洋食にも合わせやすい。"
+      },
+      "taste_score": 4.4,
+      "aroma_score": 4.3
+    },
+    {
+      "brand_name": "獺祭",
+      "product_name": "純米大吟醸 磨き二割三分",
+      "type": "純米大吟醸",
+      "region": "山口県岩国市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "華やかで濃厚なフルーツ香、パイナップルやマスカットの印象",
+        "palate": "極めて繊細でなめらかな甘味と酸味の調和",
+        "finish": "長く続く優美な余韻",
+        "impression": "世界的に有名なプレミアム酒。香り系日本酒の代表。"
+      },
+      "taste_score": 4.9,
+      "aroma_score": 5.0
+    },
+    {
+      "brand_name": "東洋美人",
+      "product_name": "純米吟醸 壱番纏",
+      "type": "純米吟醸",
+      "region": "山口県萩市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "穏やかで清楚な香り、白い花や梨のニュアンス",
+        "palate": "柔らかい甘味と酸味が調和し、繊細で上品",
+        "finish": "静かに消える美しいキレ",
+        "impression": "“飲む香水”と評される優美な一本。女性人気が高い。"
+      },
+      "taste_score": 4.7,
+      "aroma_score": 4.8
+    }
+  ]
+  

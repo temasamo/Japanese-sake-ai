@@ -1,0 +1,108 @@
+[
+    {
+      "brand_name": "三芳菊",
+      "product_name": "純米吟醸 無濾過生原酒",
+      "type": "純米吟醸",
+      "region": "徳島県三好市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "トロピカルフルーツのような濃厚な香り、パッションフルーツやライチの印象",
+        "palate": "フレッシュでジューシー、酸味と甘味のバランスが絶妙",
+        "finish": "軽快に消える爽やかな余韻",
+        "impression": "“フルーツ日本酒”の先駆け。ナチュラルで個性派な一本。"
+      },
+      "taste_score": 4.7,
+      "aroma_score": 4.9
+    },
+    {
+      "brand_name": "悦凱陣",
+      "product_name": "山廃純米 無濾過生",
+      "type": "純米酒",
+      "region": "香川県仲多度郡琴平町",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "熟成感のある香り、乳酸や木のニュアンス",
+        "palate": "厚みのある旨味としっかりした酸、力強い飲み応え",
+        "finish": "長く深い余韻が残る",
+        "impression": "骨太な山廃の代表格。燗にすると旨味が際立つ伝統派。"
+      },
+      "taste_score": 4.6,
+      "aroma_score": 4.2
+    },
+    {
+      "brand_name": "川鶴",
+      "product_name": "純米吟醸",
+      "type": "純米吟醸",
+      "region": "香川県観音寺市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "穏やかで上品な吟醸香、白桃や米の甘い香り",
+        "palate": "優しい甘味とコク、酸のバランスが取れた中口",
+        "finish": "柔らかくスッと消える後味",
+        "impression": "地元で愛されるやわらかい味わい。香川の定番酒。"
+      },
+      "taste_score": 4.3,
+      "aroma_score": 4.0
+    },
+    {
+      "brand_name": "石鎚",
+      "product_name": "純米吟醸 緑ラベル",
+      "type": "純米吟醸",
+      "region": "愛媛県西条市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "清涼感のある香り、青リンゴや柑橘の印象",
+        "palate": "シャープで透明感のある辛口、酸味が爽やか",
+        "finish": "キレのある後味で非常にクリア",
+        "impression": "石鎚山の伏流水で仕込む清らかな辛口。食中酒に最適。"
+      },
+      "taste_score": 4.5,
+      "aroma_score": 4.3
+    },
+    {
+      "brand_name": "梅錦",
+      "product_name": "純米吟醸 銀ラベル",
+      "type": "純米吟醸",
+      "region": "愛媛県四国中央市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "やや華やかで穏やかな吟醸香、リンゴや米の香り",
+        "palate": "なめらかな旨味と酸味の調和、やや辛口寄り",
+        "finish": "スッキリとした後味",
+        "impression": "安定感のある食中酒。愛媛の伝統を感じる味わい。"
+      },
+      "taste_score": 4.2,
+      "aroma_score": 3.9
+    },
+    {
+      "brand_name": "酔鯨",
+      "product_name": "純米吟醸 吟麗",
+      "type": "純米吟醸",
+      "region": "高知県高知市",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "爽やかで控えめな香り、柑橘やミントの印象",
+        "palate": "辛口で切れ味鋭く、ミネラル感がある",
+        "finish": "スパッとしたキレとドライな余韻",
+        "impression": "高知の定番。淡泊な料理とのペアリングに最適。"
+      },
+      "taste_score": 4.4,
+      "aroma_score": 4.0
+    },
+    {
+      "brand_name": "美丈夫",
+      "product_name": "純米吟醸 舞",
+      "type": "純米吟醸",
+      "region": "高知県安芸郡田野町",
+      "region_tag": "base",
+      "flavor_notes": {
+        "aroma": "フレッシュで華やか、グレープフルーツや白桃の香り",
+        "palate": "軽快でみずみずしい、辛口ながら旨味も豊か",
+        "finish": "透明感のある爽やかな後味",
+        "impression": "若い蔵元が造るモダン高知酒。爽快で飲みやすい。"
+      },
+      "taste_score": 4.5,
+      "aroma_score": 4.4
+    }
+  ]
+  
