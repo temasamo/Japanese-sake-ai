@@ -1,287 +1,192 @@
-import { useMemo, useState } from "react";
-import Link from "next/link";
-import Image from "next/image";
+import { useState, useRef, useEffect } from "react";
 
-type Purpose = "gift" | "self";
-type Taste = "dry" | "medium" | "sweet";
-type Budget = "u3" | "b3_5" | "b5_8" | "b8_12" | "o12";
-
-type Step = 0 | 1 | 2 | 3; // 3=まとめ
-
-const tasteJa: Record<Taste, string> = {
-  dry: "辛口",
-  medium: "中口",
-  sweet: "甘口",
-};
-
-const budgetLabel: Record<Budget, string> = {
-  u3: "〜¥3,000",
-  b3_5: "¥3,000〜¥5,000",
-  b5_8: "¥5,000〜¥8,000",
-  b8_12: "¥8,000〜¥12,000",
-  o12: "¥12,000〜",
+type Message = {
+  role: "user" | "assistant";
+  content: string;
+  recommendations?: Array<{
+    brand: string;
+    product: string;
+    reason: string;
+  }>;
 };
 
 export default function DiagnosePage() {
-  const [step, setStep] = useState<Step>(0);
-  const [purpose, setPurpose] = useState<Purpose | null>(null);
-  const [taste, setTaste] = useState<Taste | null>(null);
-  const [budget, setBudget] = useState<Budget | null>(null);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  type Cand = { id:string; title:string; price:number|null; image:string|null; shop:string|null; url:string };
-  const [cands, setCands] = useState<Cand[] | null>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const mode: "normal" | "gift" = useMemo(
-    () => (purpose === "gift" ? "gift" : "normal"),
-    [purpose]
-  );
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
 
-  // 検索へ渡す仮のクエリ（後で賢くする）
-  const query = useMemo(() => {
-    const parts: string[] = [];
-    if (taste === "dry") parts.push("辛口");
-    if (taste === "sweet") parts.push("甘口");
-    if (purpose === "gift") parts.push("ギフト");
-    parts.push("純米吟醸"); // 仮のベース語
-    return parts.join(" ");
-  }, [purpose, taste]);
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
-  // 予算レンジ関数を追加
-  function budgetRange(b: Budget | null): {min?:number; max?:number} {
-    if (!b) return {};
-    if (b === "u3") return { max: 3000 };
-    if (b === "b3_5") return { min: 3000, max: 5000 };
-    if (b === "b5_8") return { min: 5000, max: 8000 };
-    if (b === "b8_12") return { min: 8000, max: 12000 };
-    return { min: 12000 }; // o12
-  }
+  // 初回の挨拶
+  useEffect(() => {
+    const greeting = getGreeting();
+    setMessages([
+      {
+        role: "assistant",
+        content: `${greeting}🍶 日本酒ソムリエAIです。\nどんな日本酒をお探しですか？\n\n例：「フルーティーで華やかな香りの日本酒が飲みたい」「辛口で飲みやすい日本酒を探しています」など、お気軽にお聞かせください。`,
+      },
+    ]);
+  }, []);
 
-  // 診断実行（/api/search を呼んで5件に整形）
-  async function runDiagnosis() {
-    setError(null);
-    setCands(null);
-    setLoading(true);
-    try {
-      const m = mode; // "normal" | "gift"
-      const { min, max } = budgetRange(budget);
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return "おはようございます。";
+    if (hour < 18) return "こんにちは。";
+    return "こんばんは。";
+  };
 
-      // ▼ 価格レンジを API へ渡す（サーバー側で絞って返してもらう）
-      const params = new URLSearchParams({
-        q: query,
-        mode: m,
-        ...(typeof min === "number" ? { minPrice: String(min) } : {}),
-        ...(typeof max === "number" ? { maxPrice: String(max) } : {}),
+  // Markdownの太字記法（**text**）をHTMLに変換
+  const formatMessage = (text: string) => {
+    return text
+      .split(/(\*\*.*?\*\*)/g)
+      .map((part, idx) => {
+        if (part.startsWith("**") && part.endsWith("**")) {
+          return <strong key={idx}>{part.slice(2, -2)}</strong>;
+        }
+        return part;
       });
-      const r = await fetch(`/api/search?${params.toString()}`);
-      const j: unknown = await r.json();
-      if (!r.ok || !j || typeof j !== "object" || !j || !("items" in j) || !Array.isArray((j as { items: unknown[] }).items)) {
-        throw new Error("検索結果を取得できませんでした");
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!input.trim() || loading) return;
+
+    const userMessage = input.trim();
+    setInput("");
+    setLoading(true);
+
+    // ユーザーメッセージを追加
+    setMessages((prev) => [...prev, { role: "user", content: userMessage }]);
+
+    try {
+      const response = await fetch("/api/sake/diagnose", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query: userMessage }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "エラーが発生しました");
       }
 
-      let items: Cand[] = (j as { items: Cand[] }).items;
-
-      // 念のためクライアントでも二重チェック
-      if (typeof min === "number" || typeof max === "number") {
-        items = items.filter((it: Cand) => {
-          if (it.price == null) return false;
-          if (typeof min === "number" && it.price < min) return false;
-          if (typeof max === "number" && it.price > max) return false;
-          return true;
-        });
-      }
-
-      // ▼ 0件ならフォールバック：予算無視で上位5件だけ表示
-      if (items.length === 0 && Array.isArray((j as { items: Cand[] }).items)) {
-        items = (j as { items: Cand[] }).items.slice(0, 5);
+      // AIのメッセージを生成
+      let assistantContent = "";
+      if (data.recommendations && data.recommendations.length > 0) {
+        assistantContent = `お探しの日本酒が見つかりました！🍶\n\n${data.recommendations
+          .map(
+            (rec: { brand: string; product: string; reason: string }, idx: number) =>
+              `${idx + 1}. **${rec.brand} ${rec.product}**\n   ${rec.reason}`
+          )
+          .join("\n\n")}`;
       } else {
-        items = items.slice(0, 5);
+        assistantContent = data.message || "該当する日本酒が見つかりませんでした。別のキーワードでお試しください。";
       }
 
-      setCands(items);
-    } catch (e: unknown) {
-      setError((e instanceof Error) ? e.message : String(e));
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          content: assistantContent,
+          recommendations: data.recommendations,
+        },
+      ]);
+    } catch (error) {
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: "assistant",
+          content: `申し訳ございません。エラーが発生しました。もう一度お試しください。`,
+        },
+      ]);
     } finally {
       setLoading(false);
     }
-  }
-
-  const canNext = (s: Step): boolean => {
-    if (s === 0) return purpose !== null;
-    if (s === 1) return taste !== null;
-    if (s === 2) return budget !== null;
-    return true;
-  };
-
-  const reset = () => {
-    setStep(0);
-    setPurpose(null);
-    setTaste(null);
-    setBudget(null);
-    setCands(null);
-    setError(null);
   };
 
   return (
-    <main className="p-4 max-w-3xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">日本酒診断（簡易チャットMVP）</h1>
+    <div className="flex flex-col h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900">
+      {/* ヘッダー */}
+      <header className="border-b border-slate-700 bg-slate-800/50 backdrop-blur-sm px-4 py-3">
+        <h1 className="text-xl font-semibold text-slate-100">日本酒ソムリエAI</h1>
+        <p className="text-xs text-slate-400 mt-1">あなたの好みに合わせた日本酒をご提案します</p>
+      </header>
 
-      {/* ステップ表示 */}
-      <div className="text-sm text-gray-600 mb-3">Step {step + 1} / 4</div>
-
-      {/* Q1 */}
-      {step === 0 && (
-        <section className="mb-6">
-          <p className="mb-2 font-medium">Q1. 用途は？</p>
-          <div className="flex gap-2 flex-wrap">
-            <button
-              className={`border px-3 py-2 rounded ${
-                purpose === "self" ? "bg-black text-white" : ""
+      {/* メッセージエリア */}
+      <div className="flex-1 overflow-y-auto px-4 py-6 space-y-4">
+        {messages.map((msg, idx) => (
+          <div
+            key={idx}
+            className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
+          >
+            <div
+              className={`max-w-[80%] rounded-lg px-4 py-3 ${
+                msg.role === "user"
+                  ? "bg-blue-600 text-white"
+                  : "bg-slate-700/80 text-slate-100 border border-slate-600"
               }`}
-              onClick={() => setPurpose("self")}
             >
-              自分用
-            </button>
-            <button
-              className={`border px-3 py-2 rounded ${
-                purpose === "gift" ? "bg-black text-white" : ""
-              }`}
-              onClick={() => setPurpose("gift")}
-            >
-              贈り物（ギフト）
-            </button>
-          </div>
-        </section>
-      )}
-
-      {/* Q2 */}
-      {step === 1 && (
-        <section className="mb-6">
-          <p className="mb-2 font-medium">Q2. 味の傾向は？</p>
-          <div className="flex gap-2 flex-wrap">
-            {(["dry", "sweet"] as const).map((k) => (
-              <button
-                key={k}
-                className={`border px-3 py-2 rounded ${
-                  taste === k ? "bg-black text-white" : ""
-                }`}
-                onClick={() => setTaste(k)}
-              >
-                {tasteJa[k]}
-              </button>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* Q3 */}
-      {step === 2 && (
-        <section className="mb-6">
-          <p className="mb-2 font-medium">Q3. 予算は？</p>
-          <div className="grid grid-cols-2 gap-2 max-w-md">
-            {(
-              ["u3", "b3_5", "b5_8", "b8_12", "o12"] as const
-            ).map((k) => (
-              <button
-                key={k}
-                className={`border px-3 py-2 rounded text-left ${
-                  budget === k ? "bg-black text-white" : ""
-                }`}
-                onClick={() => setBudget(k)}
-              >
-                {budgetLabel[k]}
-              </button>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* まとめ */}
-      {step === 3 && (
-        <section className="mb-6">
-          <p className="mb-2 font-medium">まとめ</p>
-          <ul className="text-sm list-disc ml-5 mb-3">
-            <li>用途：{purpose === "gift" ? "ギフト" : "自分用"}</li>
-            <li>味わい：{taste ? tasteJa[taste] : "-"}</li>
-            <li>予算：{budget ? budgetLabel[budget] : "-"}</li>
-          </ul>
-
-          {/* いまは UI だけ：/search に渡す */}
-          <div className="flex gap-2 flex-wrap">
-            <Link
-              href={`/search?q=${encodeURIComponent(query)}&mode=${mode}`}
-              className="border px-4 py-2 rounded"
-            >
-              この条件で探す（/searchへ）
-            </Link>
-            <button className="border px-4 py-2 rounded bg-black text-white" onClick={runDiagnosis}>
-              この条件で診断（5件表示）
-            </button>
-            <button className="border px-4 py-2 rounded" onClick={reset}>
-              やり直す
-            </button>
-          </div>
-
-          <p className="text-xs text-gray-600 mt-3">
-            ※MVP版：ここでは検索は実行せず、条件を /search に受け渡すだけです。候補5件の自動提示や最安値連動は次のステップで追加します。
-          </p>
-        </section>
-      )}
-
-      {/* 結果表示 */}
-      {loading && <div className="mt-4 text-sm text-gray-600">診断中…</div>}
-      {error && <div className="mt-4 text-sm text-red-600">{error}</div>}
-      {!loading && cands && (
-        <ul className="mt-4 grid gap-3">
-          {cands.length === 0 && (
-            <li className="text-sm text-gray-600">条件に合う商品が見つかりませんでした。予算やキーワードを少し緩めてみてください。</li>
-          )}
-          {cands.map((it) => (
-            <li key={it.id} className="border p-3 rounded flex gap-3 items-start">
-              {it.image ? (
-                <Image src={it.image} alt={it.title} width={96} height={96} />
-              ) : (
-                <div className="w-[96px] h-[96px] bg-gray-100 grid place-items-center text-xs">No Image</div>
+              {msg.role === "assistant" && (
+                <div className="text-xs font-medium text-slate-300 mb-2 pb-2 border-b border-slate-600">
+                  日本酒ソムリエ
+                </div>
               )}
-              <div className="flex-1">
-                <div className="font-medium mb-1">{it.title}</div>
-                <div className="text-sm text-gray-700 mb-1">{it.shop ?? "-"}</div>
-                <div className="text-sm mb-2">{it.price != null ? `¥${it.price.toLocaleString()}` : "-"}</div>
-
-                {/* 楽天（もしも）リンク：まずは既存の it.url を /api/out 経由で */}
-                <a
-                  className="inline-block text-blue-600 underline"
-                  href={`/api/out?url=${encodeURIComponent(it.url)}`}
-                  target="_blank" rel="noopener noreferrer"
-                >
-                  購入へ（楽天）
-                </a>
-
-                {/* 将来：ここに Yahoo/Amazon の横並びリンクを足す */}
-                {/* <div className="text-xs mt-1 text-gray-600">他のモール: Yahoo / Amazon（近日）</div> */}
+              <div className="whitespace-pre-wrap text-sm leading-relaxed">
+                {formatMessage(msg.content)}
               </div>
-            </li>
-          ))}
-        </ul>
-      )}
+            </div>
+          </div>
+        ))}
 
-      {/* ナビゲーション */}
-      <div className="mt-6 flex items-center gap-2">
-        <button
-          className="border px-3 py-1 rounded disabled:opacity-40"
-          onClick={() => setStep((s) => (s > 0 ? ((s - 1) as Step) : s))}
-          disabled={step === 0}
-        >
-          戻る
-        </button>
-        <button
-          className="border px-3 py-1 rounded disabled:opacity-40"
-          onClick={() => setStep((s) => (s < 3 ? ((s + 1) as Step) : s))}
-          disabled={!canNext(step) || step === 3}
-        >
-          次へ
-        </button>
+        {loading && (
+          <div className="flex justify-start">
+            <div className="bg-slate-700/80 text-slate-100 border border-slate-600 rounded-lg px-4 py-3">
+              <div className="text-xs font-medium text-slate-300 mb-2 pb-2 border-b border-slate-600">
+                日本酒ソムリエ
+              </div>
+              <div className="flex items-center space-x-2 text-sm">
+                <span>考え中</span>
+                <div className="flex space-x-1">
+                  <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: "0ms" }}></div>
+                  <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: "150ms" }}></div>
+                  <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce" style={{ animationDelay: "300ms" }}></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div ref={messagesEndRef} />
       </div>
-    </main>
+
+      {/* 入力エリア */}
+      <form onSubmit={handleSubmit} className="border-t border-slate-700 bg-slate-800/50 backdrop-blur-sm px-4 py-4">
+        <div className="flex gap-2 max-w-4xl mx-auto">
+          <input
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="例：フルーティーで華やかな香りの日本酒が飲みたい"
+            className="flex-1 px-4 py-3 bg-slate-700/50 border border-slate-600 rounded-lg text-slate-100 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            disabled={loading}
+          />
+          <button
+            type="submit"
+            disabled={!input.trim() || loading}
+            className="px-6 py-3 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-600 disabled:cursor-not-allowed text-white rounded-lg font-medium transition-colors"
+          >
+            送信
+          </button>
+        </div>
+      </form>
+    </div>
   );
 }
