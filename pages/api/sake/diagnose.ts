@@ -1,98 +1,140 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import OpenAI from "openai";
 import { createClient } from "@supabase/supabase-js";
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY!,
-});
+import OpenAI from "openai";
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
 
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY!,
+});
+
+// --- 型定義 ---
+type Sake = {
+  id: string;
+  brand_name: string;
+  product_name: string;
+  type: string;
+  region: string;
+  region_tag: string;
+  flavor_notes: any;
+  taste_score: number;
+  aroma_score: number;
+  similarity: number;
+};
+
+// --- ヘルパー：ギフトモード判定 ---
+function detectGiftMode(query: string): boolean {
+  const giftKeywords = [
+    "プレゼント",
+    "贈り物",
+    "ギフト",
+    "父",
+    "母",
+    "上司",
+    "友達",
+    "誕生日",
+    "お祝い",
+    "贈る",
+  ];
+  return giftKeywords.some((kw) => query.includes(kw));
+}
+
+// --- ヘルパー：RAG検索 ---
+async function searchSakeEmbeddings(
+  queryEmbedding: number[],
+  matchThreshold = 0.4,
+  matchCount = 5,
+  regionTag = "base"
+) {
+  const { data, error } = await supabase.rpc("match_sake_embeddings", {
+    query_embedding: queryEmbedding,
+    match_threshold: matchThreshold,
+    match_count: matchCount,
+    region_tag_input: regionTag,
+  });
+
+  if (error) {
+    console.error("Supabase RPC error:", error);
+    return [];
+  }
+
+  return (data || []) as Sake[];
+}
+
+// --- APIハンドラー ---
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method !== "POST") {
+    return res.status(405).json({ error: "Method not allowed" });
+  }
+
   try {
-    if (req.method !== "POST") {
-      return res.status(405).json({ error: "Method not allowed" });
+    const { query, region_tag = "base", match_threshold = 0.4 } = req.body;
+
+    if (!query) {
+      return res.status(400).json({ error: "Missing query" });
     }
 
-    const { query, region_tag = "base", match_threshold = 0.5 } = req.body;
+    // 🧠 ギフトモード自動判定
+    const isGiftMode = detectGiftMode(query);
 
-    // 1️⃣ クエリをembedding化
-    const embeddingRes = await openai.embeddings.create({
+    // 🧩 Embedding生成
+    const embeddingResponse = await openai.embeddings.create({
       model: "text-embedding-3-small",
       input: query,
     });
-    const queryEmbedding = embeddingRes.data[0].embedding;
 
-    // 2️⃣ Supabase RPC呼び出し
-    const { data: matches, error } = await supabase.rpc("match_sake_embeddings", {
-      query_embedding: queryEmbedding,
-      match_threshold,
-      match_count: 5,
-      region_tag_input: region_tag,
-    });
+    const [{ embedding }] = embeddingResponse.data;
 
-    if (error) throw error;
-    if (!matches || matches.length === 0) {
+    // 🔍 類似日本酒検索
+    const results = await searchSakeEmbeddings(embedding, match_threshold, 5, region_tag);
+
+    if (!results.length) {
       return res.status(200).json({
-        message: "該当する日本酒が見つかりませんでした。",
-        suggestions: [],
+        mode: isGiftMode ? "gift" : "normal",
+        message: "該当する日本酒が見つかりませんでした。別のキーワードでお試しください。",
+        results: [],
       });
     }
 
-    // 3️⃣ GPTで提案文生成
-    const prompt = `
-あなたは日本酒コンシェルジュです。
-ユーザーの希望: 「${query}」
-以下の日本酒候補から3〜5本を選び、それぞれに短い説明を付けてください。
+    // 🧠 GPTで自然言語整形
+    const sakeListText = results
+      .map(
+        (s, i) =>
+          `${i + 1}. ${s.brand_name} ${s.product_name}（${s.region}）\n・${
+            s.flavor_notes?.aroma ||
+            s.flavor_notes?.palate ||
+            s.flavor_notes?.finish ||
+            s.flavor_notes?.impression ||
+            "特徴情報なし"
+          }`
+      )
+      .join("\n\n");
 
-候補一覧:
-${matches
-  .map(
-    (m: any, i: number) =>
-      `${i + 1}. ${m.brand_name} ${m.product_name}（${m.region}）: ${m.flavor_notes?.impression || ""}`
-  )
-  .join("\n")}
-
-出力形式（JSON）:
-[
-  {"brand":"銘柄名","product":"商品名","reason":"理由"}
-]
-`;
+    const systemPrompt = isGiftMode
+      ? `あなたは日本酒ソムリエAIです。ユーザーが「贈り物」や「プレゼント」に最適な日本酒を探しています。以下の検索結果から、贈る相手に喜ばれるような理由を添えて自然に提案してください。`
+      : `あなたは日本酒ソムリエAIです。ユーザーが自分に合う日本酒を探しています。以下の検索結果から、香りや味わいの特徴を踏まえて自然に提案してください。`;
 
     const completion = await openai.chat.completions.create({
       model: "gpt-4o-mini",
-      messages: [{ role: "user", content: prompt }],
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: `ユーザーの入力: ${query}\n検索結果:\n${sakeListText}` },
+      ],
       temperature: 0.7,
     });
 
-    const responseText = completion.choices[0].message?.content ?? "[]";
-    let jsonResult;
-    try {
-      // JSONコードブロック形式（```json ... ```）からJSONを抽出
-      let cleanedText = responseText.trim();
-      if (cleanedText.startsWith("```json")) {
-        cleanedText = cleanedText.replace(/^```json\s*/, "").replace(/\s*```$/, "");
-      } else if (cleanedText.startsWith("```")) {
-        cleanedText = cleanedText.replace(/^```\s*/, "").replace(/\s*```$/, "");
-      }
-      jsonResult = JSON.parse(cleanedText);
-    } catch (parseError) {
-      console.error("JSON parse error:", parseError);
-      console.error("Response text:", responseText);
-      jsonResult = [{ brand: "データ解析エラー", reason: responseText }];
-    }
+    const aiMessage = completion.choices[0].message?.content?.trim() ?? "提案を生成できませんでした。";
 
-    // 4️⃣ レスポンス返却
-    return res.status(200).json({
-      query,
-      total_matches: matches.length,
-      recommendations: jsonResult,
+    res.status(200).json({
+      mode: isGiftMode ? "gift" : "normal",
+      message: aiMessage,
+      results,
     });
-  } catch (err: any) {
-    console.error("❌ Diagnose API Error:", err);
-    return res.status(500).json({ error: err.message || "Internal Server Error" });
+  } catch (error: any) {
+    console.error("❌ Error in sake diagnose:", error);
+    res.status(500).json({ error: error.message || "Internal Server Error" });
   }
 }
