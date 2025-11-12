@@ -128,6 +128,27 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const aiMessage = completion.choices[0].message?.content?.trim() ?? "提案を生成できませんでした。";
 
+    // 📝 Supabaseへのログ保存（非同期で実行、エラーはログのみ）
+    void (async () => {
+      try {
+        const { error } = await supabase.from("ai_sake_logs").insert({
+          user_query: query,
+          is_gift_mode: isGiftMode,
+          ai_message: aiMessage,
+          sake_results: results,
+          similarity_scores: results.map((r) => r.similarity),
+          model: "gpt-4o-mini",
+        });
+        if (error) {
+          console.error("❌ Failed to save log:", error);
+        } else {
+          console.log("✅ Log saved successfully");
+        }
+      } catch (err) {
+        console.error("❌ Error saving log:", err);
+      }
+    })();
+
     res.status(200).json({
       mode: isGiftMode ? "gift" : "normal",
       message: aiMessage,
