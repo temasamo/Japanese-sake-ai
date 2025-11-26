@@ -22,6 +22,12 @@ export default function Home() {
             >
               🍶 日本酒ソムリエAIとチャット
             </Link>
+            <Link
+              href="/sake-chat"
+              className="inline-block bg-emerald-600 text-white px-6 py-3 rounded hover:bg-emerald-700 text-center"
+            >
+              🤖 エージェントモード (App Router)
+            </Link>
           </div>
           <div className="text-sm text-gray-600">
             <p>機能:</p>
